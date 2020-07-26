@@ -4,6 +4,7 @@ import Typing from './Typing';
 import Message from './Message';
 import { getThreadMessagesFromAPI } from '../../../store/actions/messagesActions';
 import ChatInput from './ChatInput';
+import ReactTimeAgo from 'react-time-ago'
 const ChatList = (props) => {
     const {thread} = props;
     const messages = useSelector(state => state.messages[thread.id] || []);
@@ -20,7 +21,7 @@ const ChatList = (props) => {
             <div class="contact bar">
                 <div class="pic stark"></div>
                 <div class="name">{thread.user.name}</div>
-                <div class="seen">{thread.updated_time}</div>
+                <div class="seen"><ReactTimeAgo date={thread.updated_time}/></div>
             </div>
             <div class="messages" id="chat">
                 <div class="time">Today at 11:41</div>

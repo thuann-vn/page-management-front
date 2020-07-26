@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLaughBeam } from '@fortawesome/free-solid-svg-icons'
 const ChatInput = () => {
     return (
-        <div class="input"><i class="fas fa-camera"></i><i class="far fa-laugh-beam"></i>
-            <input /><i class="fas fa-microphone"></i>
+        <div class="input">
+            <input /><FontAwesomeIcon icon={faLaughBeam}/>
         </div>
     )
 }

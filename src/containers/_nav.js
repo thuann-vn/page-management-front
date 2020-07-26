@@ -10,6 +10,15 @@ export default [
     }
   },
   {
+    _tag: 'CSidebarNavItem',
+    name: 'Messages',
+    to: '/messages',
+    icon: 'cil-pencil',
+    badge: {
+      color: 'info',
+    }
+  },
+  {
     _tag: 'CSidebarNavTitle',
     _children: ['Theme']
   },

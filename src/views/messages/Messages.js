@@ -10,7 +10,7 @@ const Messages = () => {
     
     React.useEffect(()=>{
         dispatch(getThreadFromApi());
-    }, []);
+    });
 
     return (
         <>

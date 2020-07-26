@@ -52,8 +52,14 @@ $background: #F7F7F7;
 	}
 
 	.name {
-		font-weight: 500;
+		font-weight: normal;
 		margin-bottom: 0.125rem;
+	}
+
+	&.un_read{
+		.name {
+			font-weight: bold;
+		}
 	}
 
 	.time{

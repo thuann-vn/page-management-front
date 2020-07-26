@@ -4,6 +4,9 @@ const Message = (props) => {
     if(props.position == 'right'){
         className+= ' right';
     }
+    if(props.data.unread_count > 0){
+        className+= ' unread';
+    }
     return (
         <div class={className}>
             {props.children}
