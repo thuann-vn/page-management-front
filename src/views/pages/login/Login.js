@@ -8,25 +8,35 @@ import {
   CCol,
   CContainer,
   CForm,
-  CInput,
-  CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupText,
   CRow
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 import { useDispatch } from 'react-redux'
 import { AuthService } from '../../../services/auth'
+import FacebookLogin from 'react-facebook-login'
+import Config from '../../../constants/Config'
+import { login } from '../../../store/actions/settingsActions';
 
 const Login = () => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email] = React.useState('');
+  const [password] = React.useState('');
   const dispatch = useDispatch();
 
   const login = React.useCallback(()=>{
-    AuthService.login(email, password).then((result)=>{
+    AuthService.login(email, password).then(()=>{
+      dispatch(login())
     })
   },[])
+
+  const facebookLogin = (result)=>{
+    AuthService.facebookLogin(result).then((result)=>{
+      if(result.success){
+        localStorage.setItem('userToken', result.token);
+        dispatch(login(result.profile, result.token));
+      }else{
+        alert('Login failed, please try again!');
+      }
+    });
+   }
 
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
@@ -39,29 +49,13 @@ const Login = () => {
                   <CForm>
                     <h1>Login</h1>
                     <p className="text-muted">Sign In to your account</p>
-                    <CInputGroup className="mb-3">
-                      <CInputGroupPrepend>
-                        <CInputGroupText>
-                        </CInputGroupText>
-                      </CInputGroupPrepend>
-                      <CInput type="text" defaultValue={email} onChange={(event)=>setEmail(event.target.value)} placeholder="Username" autoComplete="username" />
-                    </CInputGroup>
-                    <CInputGroup className="mb-4">
-                      <CInputGroupPrepend>
-                        <CInputGroupText>
-                          <CIcon name="cil-lock-locked" />
-                        </CInputGroupText>
-                      </CInputGroupPrepend>
-                      <CInput type="password" defaultValue={password} onChange={(event)=>setPassword(event.target.value)} placeholder="Password" autoComplete="current-password" />
-                    </CInputGroup>
-                    <CRow>
-                      <CCol xs="6">
-                        <CButton color="primary" className="px-4" onClick={login}>Login</CButton>
-                      </CCol>
-                      <CCol xs="6" className="text-right">
-                        <CButton color="link" className="px-0">Forgot password?</CButton>
-                      </CCol>
-                    </CRow>
+                    <FacebookLogin
+                      size="small"
+                      appId={Config.facebookID}
+                      autoLoad={true}
+                      fields="name,email,picture"
+                      callback={facebookLogin}
+                    />
                   </CForm>
                 </CCardBody>
               </CCard>
