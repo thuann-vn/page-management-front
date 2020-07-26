@@ -1,17 +1,27 @@
 // Imports: Dependencies
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk'; 
+import thunk from 'redux-thunk';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 /* Import all reducers */
 import settingsReducer from './reducers/settingsReducer';
+import threadsReducer from './reducers/threadsReducer';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
-  
+
 // Combine reducers
 const rootReducer = combineReducers({
-    settings: settingsReducer
+    settings: settingsReducer,
+    threads: threadsReducer
 })
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const persistConfig = {
+    key: 'root',
+    storage: storage,
+    stateReconciler: autoMergeLevel2
+};
 
-// Exports
-export default store;
+const pReducer = persistReducer(persistConfig, rootReducer);
+export const store = createStore(pReducer, applyMiddleware(thunk));
+export const persistor = persistStore(store);

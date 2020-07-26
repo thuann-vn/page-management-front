@@ -1,22 +1,21 @@
-import React, { lazy } from 'react'
+import React, { lazy, useState } from 'react'
 import { FacebookService } from '../../services/facebook'
+import { useStore, useSelector, useDispatch } from 'react-redux'
+import { getThreadFromApi } from '../../store/actions/threadsActions';
+import ThreadList from './threads/ThreadList';
 const Chat = () => {
+    const threads = useSelector(state => state.threads || []);
+    const dispatch = useDispatch();
+    const [activeThread, setActiveThread] = useState(threads.length? threads[0] : {});
+    
     React.useEffect(()=>{
-        FacebookService.pages().then(results => {
-            console.log(results);
-        })
-    })
+        dispatch(getThreadFromApi());
+    });
+
     return (
         <>
             <div class="chat-container">
-                <div class="contacts">
-                    <div class="contact">
-                        <div class="pic rogers"></div>
-                        <div class="badge"></div>
-                        <div class="name"></div>
-                        <div class="message"></div>
-                    </div>
-                </div>
+                <ThreadList threads={threads} activeItem={activeThread} onItemClick={(item)=>{ setActiveThread(item)}}></ThreadList>
                 <div class="chat">
                     <div class="contact bar">
                         <div class="pic stark"></div>
