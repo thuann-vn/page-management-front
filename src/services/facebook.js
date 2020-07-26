@@ -9,4 +9,7 @@ export const FacebookService  = {
             pageId
         });
     },
+    messages: (threadId) => {
+        return api.call('/api/facebook/messages?threadId='+ threadId);
+    },
 }

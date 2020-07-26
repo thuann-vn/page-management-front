@@ -1,6 +1,5 @@
 import React from 'react';
-import Chat from './views/chat/Chat';
-
+import Messages from './views/messages/Messages';
 const Toaster = React.lazy(() => import('./views/notifications/toaster/Toaster'));
 const Tables = React.lazy(() => import('./views/base/tables/Tables'));
 
@@ -41,7 +40,7 @@ const User = React.lazy(() => import('./views/users/User'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/chat', name: 'Messages', component: Chat },
+  { path: '/messages', name: 'Messages', component: Messages },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', name: 'Theme', component: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', component: Colors },

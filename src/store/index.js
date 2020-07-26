@@ -8,12 +8,14 @@ import storage from 'redux-persist/lib/storage';
 import settingsReducer from './reducers/settingsReducer';
 import threadsReducer from './reducers/threadsReducer';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import messagesReducer from './reducers/messagesReducer';
 
 
 // Combine reducers
 const rootReducer = combineReducers({
     settings: settingsReducer,
-    threads: threadsReducer
+    threads: threadsReducer,
+    messages: messagesReducer
 })
 
 const persistConfig = {
