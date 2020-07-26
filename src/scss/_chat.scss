@@ -41,7 +41,7 @@ $background: #F7F7F7;
 	flex-direction: column;
 	justify-content: center;
 
-	&:hover, &.active{
+	&:not(.bar):hover, &.active{
 		background-color: rgba(240,240,240,.8);
 	}
 

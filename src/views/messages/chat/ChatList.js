@@ -13,7 +13,7 @@ const ChatList = (props) => {
 
     useEffect(() => {
         dispatch(getThreadMessagesFromAPI(thread.id));
-    }, [thread.id])
+    }, [thread.id]);
 
     return (
         <div class="chat">
@@ -25,7 +25,7 @@ const ChatList = (props) => {
             <div class="messages" id="chat">
                 <div class="time">Today at 11:41</div>
                 {
-                    messages.reverse().map(message => {
+                    messages.map(message => {
                         return (<Message key={message.id} data={message} position={message.from.id == props.page_id ? 'right' : ''}>{message.message}</Message>)
                     })
                 }
