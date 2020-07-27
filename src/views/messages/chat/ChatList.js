@@ -1,20 +1,41 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Typing from './Typing';
 import Message from './Message';
-import { getThreadMessagesFromAPI } from '../../../store/actions/messagesActions';
+import { getThreadMessagesFromAPI, sendMessage, sendMessageToApi } from '../../../store/actions/messagesActions';
 import ChatInput from './ChatInput';
 import ReactTimeAgo from 'react-time-ago'
 const ChatList = (props) => {
     const {thread} = props;
     const messages = useSelector(state => state.messages[thread.id] || []);
-    console.log(thread);
+    const [newMessages, setNewMessages] = useState([]);
     const [typing, setTyping] = useState(false);
     const dispatch = useDispatch();
+    const chatRef = useRef();
 
     useEffect(() => {
         dispatch(getThreadMessagesFromAPI(thread.id));
     }, [thread.id]);
+
+    
+    useEffect(() => {
+        scrollToBottom();
+        setNewMessages([]);
+    }, [messages.length, newMessages.length]);
+
+	const scrollToBottom = () => {
+        if(chatRef){
+            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+    };
+    
+    const onEnterMessage = (text) => {
+        const sendMessageAction = sendMessage(thread, text);
+        const data = sendMessageAction.payload;
+        setNewMessages([...newMessages, data]);
+        dispatch(sendMessageAction);
+        dispatch(sendMessageToApi(data));
+    }
 
     return (
         <div class="chat">
@@ -23,17 +44,22 @@ const ChatList = (props) => {
                 <div class="name">{thread.user.name}</div>
                 <div class="seen"><ReactTimeAgo date={thread.updated_time}/></div>
             </div>
-            <div class="messages" id="chat">
+            <div class="messages" id="chat" ref={chatRef}>
                 <div class="time">Today at 11:41</div>
                 {
                     messages.map(message => {
-                        return (<Message key={message.id} data={message} position={message.from.id == props.page_id ? 'right' : ''}>{message.message}</Message>)
+                        return (<Message key={message.id} data={message} position={!message.from || message.from.id == props.page_id ? 'right' : ''}>{message.message}</Message>)
+                    })
+                }
+                {
+                    newMessages.map(message => {
+                        return (<Message key={message.id} data={message} position='right'>{message.message}</Message>)
                     })
                 }
                 {typing ? <Typing /> : null}
                 
             </div>
-            <ChatInput />
+            <ChatInput thread={thread} onEnter={onEnterMessage}/>
         </div>
     )
 }

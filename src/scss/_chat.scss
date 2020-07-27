@@ -21,8 +21,8 @@ $background: #F7F7F7;
 }
 
 .pic {
-	width: 4rem;
-	height: 4rem;
+	width: 3rem;
+	height: 3rem;
 	background-size: cover;
 	background-position: center;
 	border-radius: 50%;
@@ -31,10 +31,10 @@ $background: #F7F7F7;
 .contact {
 	position: relative;
 	margin-bottom: 1rem;
-	padding-left: 5rem;
+	padding-left: 4rem;
     padding-bottom: 1rem;
     padding-top: 1rem;
-	min-height: 5rem;
+	min-height: 3rem;
 	background-color: #fff;
 
 	display: flex;
@@ -54,6 +54,7 @@ $background: #F7F7F7;
 	.name {
 		font-weight: normal;
 		margin-bottom: 0.125rem;
+		position: relative;
 	}
 
 	&.un_read{
@@ -65,7 +66,8 @@ $background: #F7F7F7;
 	.time{
 		position: absolute;
 		right: 5px;
-		top: 5px;
+		top: 0px;
+		color: $text-3;
 	}
 
 	.message, .seen {
@@ -169,7 +171,7 @@ $background: #F7F7F7;
 		.message {
 			box-sizing: border-box;
 			padding: 0.5rem 1rem;
-			margin: 1rem;
+			margin: 0.5rem 1rem;
 			background: #FFF;
 			border-radius: 1.125rem 1.125rem 1.125rem 0;
 			min-height: 2.25rem;
@@ -181,10 +183,15 @@ $background: #F7F7F7;
 				0rem 1rem 1rem -1rem rgba(black, 0.1);
 			
 			&.right {
-				margin: 1rem 1rem 1rem auto ;
+				margin: 0.5rem 1rem 0.5rem auto ;
 				border-radius: 1.125rem 1.125rem 0 1.125rem;
 				background: $text-1;
 				color: white;
+			}
+
+			&.sticker{
+				background-color: transparent !important;
+				box-shadow: none !important;
 			}
 			
 			.typing {

@@ -12,4 +12,7 @@ export const FacebookService  = {
     messages: (threadId) => {
         return api.call('/api/facebook/messages?threadId='+ threadId);
     },
+    sendMessage: (data) => {
+        return api.call('/api/facebook/postMessage', data, 'POST');
+    },
 }
