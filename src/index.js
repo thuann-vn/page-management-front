@@ -18,7 +18,7 @@ JavascriptTimeAgo.addLocale(en);
 React.icons = icons
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate persistor={persistor}>
+    <PersistGate loading={null} persistor={persistor}>
       <App/>
     </PersistGate>
   </Provider>, 

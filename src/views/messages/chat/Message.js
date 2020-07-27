@@ -1,5 +1,4 @@
 import React from 'react'
-chatimport Gallery from 'react-grid-gallery';
 import Emoji from "react-emoji-render";
 const Message = (props) => {
     var className = 'message';
