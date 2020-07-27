@@ -6,6 +6,7 @@ export const FETCH_THREAD_MESSAGES = 'FETCH_THREAD_MESSAGES'
 export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const SEND_MESSAGE_SUCCESS = 'SEND_MESSAGE_SUCCESS'
 export const SEND_MESSAGE_FAILED = 'SEND_MESSAGE_FAILED'
+export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE'
 
 export const fetchThreadMessages = (threadId, messages) => {
     return {
@@ -75,4 +76,14 @@ export const sendMessageToApi = (data) => {
                 dispatch(sendMessageFailed(data));
             });
     };
+}
+
+export const receiveMessage = (threadId, message)=>{
+    return {
+        type: RECEIVE_MESSAGE,
+        payload: {
+            message,
+            threadId
+        }
+    }
 }

@@ -1,4 +1,4 @@
-import { FETCH_THREAD_MESSAGES, SEND_MESSAGE, SEND_MESSAGE_SUCCESS, SEND_MESSAGE_FAILED } from '../actions/messagesActions'
+import { FETCH_THREAD_MESSAGES, SEND_MESSAGE, SEND_MESSAGE_SUCCESS, SEND_MESSAGE_FAILED, RECEIVE_MESSAGE } from '../actions/messagesActions'
 
 const initialState = {}
 
@@ -7,6 +7,11 @@ const messagesReducer = (state = initialState, action) => {
         case FETCH_THREAD_MESSAGES:
             var threadId = action.payload.id;
             state[threadId] = [...action.payload.messages]   
+            return state;
+        case RECEIVE_MESSAGE:
+            var message = action.payload.message;
+            var threadId = action.payload.threadId;
+            state[threadId] = [...state[threadId], message];
             return state;
         case SEND_MESSAGE:
             var message = action.payload.message;

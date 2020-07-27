@@ -2,6 +2,7 @@ import { FacebookService } from "../../services/facebook";
 
 //Action names
 export const FETCH_THREADS = 'FETCH_THREADS'
+export const THREAD_CHANGED = 'THREAD_CHANGED'
 
 export const fetchThreads = (threads) => {
     return {
@@ -15,8 +16,17 @@ export const getThreadFromApi = (pageId) => {
         FacebookService.threads(pageId)
             .then(
                 result => { 
-                    dispatch(fetchThreads(result));
+                    if(result && result.length){
+                        dispatch(fetchThreads(result));
+                    }
                 }
             );
     };
 }
+
+export const threadChanged = (thread) => {
+    return {
+        type: THREAD_CHANGED,
+        payload: thread
+    }
+};

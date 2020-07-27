@@ -177,6 +177,7 @@ $background: #F7F7F7;
 			min-height: 2.25rem;
 			width: fit-content;
 			max-width: 66%;
+			overflow: hidden;
 			
 			box-shadow: 
 				0 0 2rem rgba(black, 0.075),
@@ -206,6 +207,40 @@ $background: #F7F7F7;
 				&.typing-1 { animation: typing 3s infinite }
 				&.typing-2 { animation: typing 3s 250ms infinite }
 				&.typing-3 { animation: typing 3s 500ms infinite }
+			}
+
+			img{
+				max-width: 200px;
+			}
+
+			&.attachments{
+				display: flex;
+			}
+
+			.multi-attachments{
+				display: flex;
+				width: 300px;
+				flex-wrap: wrap;
+				justify-content: space-between;
+
+				img, video{
+					width: 145px;
+				}
+
+				.attachment{
+					display: flex;
+					height: 145px;
+					align-items: center;
+					justify-content: center;
+					border-radius: 4px;
+					overflow: hidden;
+					margin-bottom: 5px;
+
+					img{
+						min-width: 100%;
+						height: auto;
+					}
+				}
 			}
 		}
 	}

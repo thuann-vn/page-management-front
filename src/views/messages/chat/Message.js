@@ -1,4 +1,6 @@
 import React from 'react'
+chatimport Gallery from 'react-grid-gallery';
+import Emoji from "react-emoji-render";
 const Message = (props) => {
     var className = 'message';
     if(props.position == 'right'){
@@ -10,25 +12,37 @@ const Message = (props) => {
     if(props.data.sticker){
         className+= ' sticker';
     }
+
+    if(props.data.attachments && props.data.attachments.data.length >= 2){
+        className+= ' attachments';
+    }
+    const attachmentsRender = (attachments)=>{
+        if(!attachments){
+            return null;
+        }
+
+        return (<div class={attachments.data.length >= 2 ? 'multi-attachments': '' } key={props.data.id + '_attachments'}>
+            {
+                attachments.data.map((attachment, index)=>{
+                    if(attachment.image_data){
+                        return <div class="attachment" key={props.data.id + '_attachment_' + index}><img src={attachment.image_data.preview_url}/></div>
+                    }
+
+                    if(attachment.video_data){
+                        return <div class="attachment" key={props.data.id + '_attachment_' + index}><video controls src={attachment.video_data.url}/></div>
+                    }
+                })}
+        </div>) 
+    }
+
     return (
         <div class={className}>
-            {props.children}
-
+            <Emoji text={props.children}/>
             {
                 props.data.sticker && <img src={props.data.sticker} key={props.data.id + '_sticker'}/>
             }
             {
-                props.data.attachments ? props.data.attachments.data.map((attachment, index)=>{
-                    if(attachment.image_data){
-                        return <img src={attachment.image_data.preview_url} key={props.data.id + '_attachment_' + index}/>
-                    }
-
-                    if(attachment.video_data){
-                        return <video controls src={attachment.video_data.url} key={props.data.id + '_attachment_' + index}/>
-                    }
-
-                    return attachment.image_data ? <img src={attachment.image_data.preview_url} key={'attachment'}/> : null
-                }): null
+                attachmentsRender(props.data.attachments)
             }
         </div>
     )
