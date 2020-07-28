@@ -11,7 +11,7 @@ const ThreadItem = (props) => {
     }
     return (
         <div class={contactClass.join(' ')}>
-            <div class="pic"></div>
+            <div class="pic" style={{backgroundImage: `url("${props.data.avatar ? props.data.avatar : '/avatars/default.jpg'}")`}}></div>
             {props.data.unread_count > 0 ? (<div class="badge">{props.data.unread_count}</div>) : null}
             <div class="name">{props.data.user.name}<div class="time"><ReactTimeAgo date={props.data.updated_time}/></div></div>
             <div class="message">{props.data.snippet}</div>
