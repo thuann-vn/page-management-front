@@ -21,8 +21,8 @@ export const fetchThreadMessages = (threadId, messages) => {
 export const getThreadMessagesFromAPI = (threadId) => {
     return dispatch => {
         FacebookService.messages(threadId)
-            .then(
-                result => { 
+            .then(result => { 
+                console.log(result);
                     if(result && result.data){
                         dispatch(fetchThreadMessages(threadId, result.data));
                     }

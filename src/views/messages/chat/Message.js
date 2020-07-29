@@ -36,7 +36,7 @@ const Message = (props) => {
 
     return (
         <div class={className}>
-            <Emoji text={props.children}/>
+            <Emoji text={props.data.message ? props.data.message : ''}/>
             {
                 props.data.sticker && <img src={props.data.sticker} key={props.data.id + '_sticker'}/>
             }

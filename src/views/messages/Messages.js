@@ -23,7 +23,7 @@ const Messages = () => {
     React.useEffect(()=>{
         const channel = pusher.subscribe('notifications');
         channel.bind('message.new', data => {
-            console.log('Received data', data);
+            console.log('Message new', data);
             dispatch(receiveMessage(data.thread.id, data.message));
             dispatch(threadChanged(data.thread));
         });

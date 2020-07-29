@@ -56,7 +56,7 @@ const ChatList = (props) => {
                 }
                 {
                     newMessages.map(message => {
-                        return (<Message key={message.id} data={message} position='right'>{message.message}</Message>)
+                        return (<Message key={message.id} data={message} position='right'></Message>)
                     })
                 }
                 {typing ? <Typing /> : null}
