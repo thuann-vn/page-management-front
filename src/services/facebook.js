@@ -4,6 +4,9 @@ export const FacebookService  = {
     pages: ()=>{
         return api.call('/api/facebook/pages', {});
     },
+    pageSetup: (page)=>{
+        return api.call('/api/facebook/page-setup', page, 'POST');
+    },
     threads: (pageId) => {
         return api.call('/api/facebook/threads', {
             pageId

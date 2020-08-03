@@ -1,8 +1,11 @@
+import { AccountService } from "../../services/account"
+
 //Action names
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
 export const UPDATE_PROFILE = 'UPDATE_PROFILE'
 export const GET_PROFILE_UPDATE_PERCENT = 'GET_PROFILE_UPDATE_PERCENT'
+export const GET_SETUP_STATUS = 'GET_SETUP_STATUS'
 
 export const login = (user, token) => {
     return {
@@ -25,24 +28,16 @@ export const updateProfile = (profile) => {
 };
 
 
-// export const login = (username, password) => {
-//     return dispatch => {
-//         dispatch(request({ username }));
-
-//         userService.login(username, password)
-//             .then(
-//                 user => { 
-//                     dispatch(success(user));
-//                     history.push('/');
-//                 },
-//                 error => {
-//                     dispatch(failure(error));
-//                     dispatch(alertActions.error(error));
-//                 }
-//             );
-//     };
-
-//     function request(user) { return { type: userConstants.LOGIN_REQUEST, user } }
-//     function success(user) { return { type: userConstants.LOGIN_SUCCESS, user } }
-//     function failure(error) { return { type: userConstants.LOGIN_FAILURE, error } }
-// }
+export const getAccountSetupStatus = () => {
+    return dispatch => {
+        AccountService.getSetupStatus()
+            .then(response => {
+                if(response.success){
+                    dispatch({
+                        type: GET_SETUP_STATUS,
+                        payload: response.data
+                    })
+                }
+            });
+    };
+}

@@ -25,7 +25,11 @@ const Login = ({history}) => {
         if(result.success){
           localStorage.setItem('userToken', result.token);
           dispatch(login(result.profile, result.token));
-          history.replace('/dashboard');
+          if(result.profile.setup && result.profile.setup.complete){
+            history.replace('/dashboard');
+          }else{
+            history.replace('/setup');
+          }
         }else{
           alert('Login failed, please try again!');
         }

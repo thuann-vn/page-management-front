@@ -1,8 +1,9 @@
-import { LOGIN, LOGOUT, UPDATE_PROFILE } from '../actions/settingsActions'
+import { LOGIN, LOGOUT, UPDATE_PROFILE, GET_SETUP_STATUS } from '../actions/settingsActions'
 
 const initialState = {
    token: null,
-   userInfo: null
+   userInfo: null,
+   setupStatus: null,
 }
 
 const settingsReducer = (state = initialState, action) => {
@@ -23,6 +24,12 @@ const settingsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 userInfo: {...state.userInfo, ...action.payload}
+            };
+        case GET_SETUP_STATUS:
+            return {
+                ...state,
+                userInfo: action.payload.user,
+                setupStatus: action.payload
             };
         default:
             return state;

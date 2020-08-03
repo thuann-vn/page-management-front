@@ -47,6 +47,7 @@
     "react-facebook-login": "^4.1.1",
     "react-grid-gallery": "^0.5.5",
     "react-input-emoji": "^2.0.2",
+    "react-progress-button": "^5.1.0",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-time-ago": "^6.0.0",
