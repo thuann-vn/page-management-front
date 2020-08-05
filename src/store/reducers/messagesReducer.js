@@ -19,10 +19,10 @@ const messagesReducer = (state = initialState, action) => {
             var message = action.payload.message;
             var threadId = action.payload.thread.id;
             var uuid = action.payload.uuid;
-            state[threadId].push({
-                message: message,
-                id: uuid
-            });
+            // state[threadId].push({
+            //     message: message,
+            //     id: uuid
+            // });
             return state;
         case SEND_MESSAGE_SUCCESS:
             var message = action.payload.message;

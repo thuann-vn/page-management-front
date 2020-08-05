@@ -51,7 +51,7 @@ const ChatList = (props) => {
                 {/* <div class="time">Today at 11:41</div> */}
                 {
                     messages.map(message => {
-                        return (<Message key={message.id} data={message} position={message.from.id != thread.id ? 'right' : ''}>{message.message}</Message>)
+                        return (<Message key={message.id} data={message} position={message.from?.id != thread.id ? 'right' : ''}>{message.message}</Message>)
                     })
                 }
                 {
