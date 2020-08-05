@@ -21,7 +21,7 @@ const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
 
 const Dashboard = () => {
   return (
-    <>
+    <div className="container-fluid mt-3">
       <WidgetsDropdown />
       <CCard>
         <CCardBody>
@@ -550,7 +550,7 @@ const Dashboard = () => {
           </CCard>
         </CCol>
       </CRow>
-    </>
+    </div>
   )
 }
 

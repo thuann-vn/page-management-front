@@ -44,14 +44,14 @@ const ChatList = (props) => {
         <div class="chat">
             <div class="contact bar">
                 <div class="pic stark"></div>
-                <div class="name">{thread.user?.name}</div>
-                <div class="seen"><ReactTimeAgo date={thread.updated_time ? thread.updated_time: new Date()} /></div>
+                <div class="name">{thread.name}</div>
+                <div class="seen"><ReactTimeAgo date={thread.last_update ? thread.last_update: new Date()} /></div>
             </div>
             <div class="messages" id="chat" ref={chatRef}>
-                <div class="time">Today at 11:41</div>
+                {/* <div class="time">Today at 11:41</div> */}
                 {
                     messages.map(message => {
-                        return (<Message key={message.id} data={message} position={!message.from || message.from.id == props.page_id ? 'right' : ''}>{message.message}</Message>)
+                        return (<Message key={message.id} data={message} position={message.from.id != thread.id ? 'right' : ''}>{message.message}</Message>)
                     })
                 }
                 {

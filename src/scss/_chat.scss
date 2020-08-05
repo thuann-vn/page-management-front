@@ -6,6 +6,8 @@ $text-3: #999;
 $line: #CCC;
 $time-bg: #EEE;
 $background: #F7F7F7;
+$commentBackground: #39f;
+$white: #fff;
 
 .chat-container {
 	font-family: Red hat Display, sans-serif;
@@ -211,6 +213,11 @@ $background: #F7F7F7;
 
 			img{
 				max-width: 200px;
+			}
+
+			&.comment{
+				background-color: $commentBackground;
+				color: $white;
 			}
 
 			&.attachments{

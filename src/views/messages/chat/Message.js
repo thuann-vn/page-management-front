@@ -15,6 +15,10 @@ const Message = (props) => {
     if(props.data.attachments && props.data.attachments.data.length >= 2){
         className+= ' attachments';
     }
+
+    if(props.data.type == 'COMMENT'){
+        className+= ' comment';
+    }
     const attachmentsRender = (attachments)=>{
         if(!attachments){
             return null;
