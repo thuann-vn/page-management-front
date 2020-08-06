@@ -7,6 +7,7 @@ import { receiveMessage } from '../../store/actions/messagesActions';
 
 import Pusher from 'pusher-js';
 import Config from '../../constants/Config';
+import CustomerPanel from '../../components/customerPanel/customerPanel';
 const pusher = new Pusher(Config.pusherAppKey, {
     cluster: Config.pusherCluster,
     encrypted: true
@@ -23,7 +24,6 @@ const Messages = () => {
     React.useEffect(()=>{
         const channel = pusher.subscribe('notifications');
         channel.bind('message.new', data => {
-            console.log('Message new', data);
             dispatch(receiveMessage(data.thread.id, data.message));
             dispatch(threadChanged(data.thread));
         });
@@ -34,6 +34,7 @@ const Messages = () => {
             <div class="chat-container">
                 <ThreadList threads={threads} activeItem={activeThread} onItemClick={(item)=>{ setActiveThread(item)}}></ThreadList>
                 <ChatList page_id={'106261714466963'} thread={activeThread}/>
+                <CustomerPanel id={activeThread.id}/>
             </div>
         </>
     )

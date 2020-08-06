@@ -17,7 +17,6 @@ export const getThreadFromApi = (pageId) => {
             .then(
                 result => { 
                     if(result && result.length){
-                        console.log(result)
                         dispatch(fetchThreads(result));
                     }
                 }

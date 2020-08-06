@@ -5,7 +5,7 @@ const ThreadList = (props) => {
         props.onItemClick(item);
     }
     return (
-        <div class="contacts">
+        <div className="contacts">
             {props.threads.map((item)=>{
                 return (
                     <div key={item.id} onClick={()=>clickEvent(item)}>

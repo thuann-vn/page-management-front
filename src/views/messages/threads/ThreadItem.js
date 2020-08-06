@@ -10,11 +10,11 @@ const ThreadItem = (props) => {
         contactClass.push('un_read');
     }
     return (
-        <div class={contactClass.join(' ')}>
-            <div class="pic" style={{backgroundImage: `url("${props.data.avatar ? props.data.avatar : '/avatars/default.jpg'}")`}}></div>
-            {props.data.unread_count > 0 ? (<div class="badge">{props.data.unread_count}</div>) : null}
-            <div class="name">{props.data.name || 'Unknown'}<div class="time"><ReactTimeAgo date={props.data.last_update || new Date()}/></div></div>
-            <div class="message">{props.data.snippet}</div>
+        <div className={contactClass.join(' ')}>
+            <div className="pic" style={{backgroundImage: `url("${props.data.avatar ? props.data.avatar : '/avatars/default.jpg'}")`}}></div>
+            {props.data.unread_count > 0 ? (<div className="badge">{props.data.unread_count}</div>) : null}
+            <div className="name">{props.data.name || 'Unknown'}<div className="time"><ReactTimeAgo date={props.data.last_update || new Date()}/></div></div>
+            <div className="message">{props.data.snippet}</div>
         </div>
     )
 }

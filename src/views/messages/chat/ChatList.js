@@ -5,6 +5,7 @@ import Message from './Message';
 import { getThreadMessagesFromAPI, sendMessage, sendMessageToApi, receiveMessage } from '../../../store/actions/messagesActions';
 import ChatInput from './ChatInput';
 import ReactTimeAgo from 'react-time-ago';
+import CustomScroll from 'react-custom-scroll';
 
 import { threadChanged } from '../../../store/actions/threadsActions';
 const ChatList = (props) => {
@@ -28,7 +29,7 @@ const ChatList = (props) => {
 
     const scrollToBottom = () => {
         if (chatRef) {
-            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+            // chatRef.current.updateScrollPosition = chatRef.current.scrollHeight;
         }
     };
 
@@ -41,26 +42,24 @@ const ChatList = (props) => {
     }
 
     return (
-        <div class="chat">
-            <div class="contact bar">
-                <div class="pic stark"></div>
-                <div class="name">{thread.name}</div>
-                <div class="seen"><ReactTimeAgo date={thread.last_update ? thread.last_update: new Date()} /></div>
-            </div>
-            <div class="messages" id="chat" ref={chatRef}>
-                {/* <div class="time">Today at 11:41</div> */}
-                {
-                    messages.map(message => {
-                        return (<Message key={message.id} data={message} position={message.from?.id != thread.id ? 'right' : ''}>{message.message}</Message>)
-                    })
-                }
-                {
-                    newMessages.map(message => {
-                        return (<Message key={message.id} data={message} position='right'></Message>)
-                    })
-                }
-                {typing ? <Typing /> : null}
-
+        <div className="chat">
+            <div id="chat" ref={chatRef}>
+                <CustomScroll heightRelativeToParent="100%" keepAtBottom ref={chatRef} scrollTo={chatRef.current?.scrollHeight || 0}>
+                    <div className="messages">
+                        {/* <div class="time">Today at 11:41</div> */}
+                        {
+                            messages.map(message => {
+                                return (<Message key={message.id} data={message} position={message.from?.id != thread.id ? 'right' : ''}>{message.message}</Message>)
+                            })
+                        }
+                        {
+                            newMessages.map(message => {
+                                return (<Message key={message.id} data={message} position='right'></Message>)
+                            })
+                        }
+                        {typing ? <Typing /> : null}
+                    </div>
+                </CustomScroll>
             </div>
             <ChatInput thread={thread} onEnter={onEnterMessage} />
         </div>

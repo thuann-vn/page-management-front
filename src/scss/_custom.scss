@@ -1,3 +1,8 @@
+@import '../../node_modules/react-custom-scroll/dist/customScroll.css';
+
+.rcs-custom-scroll .rcs-inner-handle{
+  background-color: rgba(0, 0, 0, 0.2);
+}
 // Here you can add other styles
 .c-main {
   padding-top: 0;

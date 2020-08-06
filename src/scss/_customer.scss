@@ -1,0 +1,68 @@
+.customer-panel{
+    width: 350px;
+    background-color: #fff;
+    border-left: 1px solid #e1e5ea;
+
+    .customer-name{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+        border-bottom: 1px solid #e1e5ea;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .customer-avatar{
+        margin: 20px 0 10px;
+
+        .pic{
+            width: 140px;
+            height: 140px;
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+    }
+
+    .customer-info{
+        padding: 15px 30px;
+    }
+    .customer-row{
+        display: flex;
+        align-items: center;
+        line-height: 24px;
+        color: #5a677d;
+        margin-top: 5px;
+
+        svg{
+            margin-right: 5px;
+            height: 30px;
+            width: 30px;
+        }
+
+        span{
+            display: block;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    .customer-panel{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 15px;
+
+        label{
+            flex: 1;
+            font-weight: bold;
+        }
+
+        button{
+            width: auto;
+        }
+    }
+}
