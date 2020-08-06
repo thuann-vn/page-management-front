@@ -58,7 +58,7 @@ export const sendMessageToApi = (data) => {
         FacebookService.sendMessage(data)
             .then(
                 result => { 
-                    if(result && result.status){
+                    if(result && result.success){
                         dispatch({
                             type: SEND_MESSAGE_SUCCESS,
                             payload: {

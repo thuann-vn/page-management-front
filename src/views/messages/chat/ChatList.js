@@ -2,17 +2,16 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Typing from './Typing';
 import Message from './Message';
-import { getThreadMessagesFromAPI, sendMessage, sendMessageToApi, receiveMessage } from '../../../store/actions/messagesActions';
+import { getThreadMessagesFromAPI, sendMessage, sendMessageToApi } from '../../../store/actions/messagesActions';
 import ChatInput from './ChatInput';
-import ReactTimeAgo from 'react-time-ago';
 import CustomScroll from 'react-custom-scroll';
 
 import { threadChanged } from '../../../store/actions/threadsActions';
 const ChatList = (props) => {
     const { thread } = props;
     const messages = useSelector(state => state.messages[thread.id] || []);
-    const [newMessages, setNewMessages] = useState([]);
-    const [typing, setTyping] = useState(false);
+    const [newMessages] = useState([]);
+    const [typing] = useState(false);
     const dispatch = useDispatch();
     const chatRef = useRef();
     useEffect(() => {
@@ -21,25 +20,13 @@ const ChatList = (props) => {
         dispatch(threadChanged(thread));
     }, [thread.id]);
 
-
-    useEffect(() => {
-        scrollToBottom();
-        setNewMessages([]);
-    }, [messages.length, newMessages.length]);
-
-    const scrollToBottom = () => {
-        if (chatRef) {
-            // chatRef.current.updateScrollPosition = chatRef.current.scrollHeight;
-        }
-    };
-
     const onEnterMessage = (text) => {
         const sendMessageAction = sendMessage(thread, text);
         const data = sendMessageAction.payload;
-        setNewMessages([...newMessages, data]);
         dispatch(sendMessageAction);
         dispatch(sendMessageToApi(data));
     }
+    console.log('Message length' + messages.length);
 
     return (
         <div className="chat">
@@ -50,11 +37,6 @@ const ChatList = (props) => {
                         {
                             messages.map(message => {
                                 return (<Message key={message.id} data={message} position={message.from?.id != thread.id ? 'right' : ''}>{message.message}</Message>)
-                            })
-                        }
-                        {
-                            newMessages.map(message => {
-                                return (<Message key={message.id} data={message} position='right'></Message>)
                             })
                         }
                         {typing ? <Typing /> : null}

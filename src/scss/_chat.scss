@@ -180,7 +180,7 @@ $white: #fff;
 			min-height: 2.25rem;
 			width: fit-content;
 			max-width: 66%;
-			overflow: hidden;
+			position: relative;
 			
 			box-shadow: 
 				0 0 2rem rgba(black, 0.075),
@@ -223,6 +223,17 @@ $white: #fff;
 
 			&.attachments{
 				display: flex;
+			}
+
+			&.sending{
+				opacity: .8;
+			}
+
+			.sending-icon{
+				position: absolute;
+				bottom: 0;
+				right: -20px;
+				color: #ccc;
 			}
 
 			.multi-attachments{
