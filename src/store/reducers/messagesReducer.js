@@ -6,8 +6,17 @@ const messagesReducer = (state = initialState, action) => {
     switch (action.type) {
         case FETCH_THREAD_MESSAGES:
             var threadId = action.payload.id;
+            var page = action.payload.page;
+            var messages = action.payload.messages;
             if(threadId){
-                state[threadId] = [...action.payload.messages] 
+                if(page == 1){
+                    state[threadId] = [...messages] 
+                }else{
+                    state[threadId] = [
+                        ...messages,
+                        ...state[threadId]
+                    ]
+                }
             }  
             return state;
         case RECEIVE_MESSAGE:

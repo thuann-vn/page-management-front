@@ -8,6 +8,7 @@ $time-bg: #EEE;
 $background: #F7F7F7;
 $commentBackground: #39f;
 $white: #fff;
+$primaryColor: #3399ff;
 
 .chat-container {
 	font-family: Red hat Display, sans-serif;
@@ -189,13 +190,22 @@ $white: #fff;
 			&.right {
 				margin: 0.5rem 1rem 0.5rem auto ;
 				border-radius: 1.125rem 1.125rem 0 1.125rem;
-				background: $text-1;
+				background: $primaryColor;
 				color: white;
 			}
 
 			&.sticker{
 				background-color: transparent !important;
 				box-shadow: none !important;
+			}
+
+			&.typing-message{
+				display: block;
+				margin: 0 auto;
+				text-align: center;
+				width: 100px;
+				margin: 0 auto;
+				border-radius: 1.125rem 1.125rem 1.125rem 1.125rem;
 			}
 			
 			.typing {
@@ -229,11 +239,26 @@ $white: #fff;
 				opacity: .8;
 			}
 
+			&.error{
+				border: 1px solid red;
+				background: red;
+
+				.sending-icon{
+					color: red;
+				}
+			}
+
 			.sending-icon{
 				position: absolute;
 				bottom: 0;
 				right: -20px;
 				color: #ccc;
+			}
+
+			.message-time{
+				position: absolute;
+				white-space: nowrap;
+				color: $text-3;
 			}
 
 			.multi-attachments{

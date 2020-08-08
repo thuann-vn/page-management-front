@@ -8,22 +8,24 @@ export const SEND_MESSAGE_SUCCESS = 'SEND_MESSAGE_SUCCESS'
 export const SEND_MESSAGE_FAILED = 'SEND_MESSAGE_FAILED'
 export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE'
 
-export const fetchThreadMessages = (threadId, messages) => {
+export const fetchThreadMessages = (threadId, messages, page) => {
     return {
         type: FETCH_THREAD_MESSAGES,
         payload: {
             id: threadId,
-            messages
+            messages,
+            page
         }
     }
 };
 
-export const getThreadMessagesFromAPI = (threadId) => {
+export const getThreadMessagesFromAPI = (threadId, page = 1, callback) => {
     return dispatch => {
-        FacebookService.messages(threadId)
+        FacebookService.messages(threadId, page)
             .then(result => { 
                     if(result && result.data){
-                        dispatch(fetchThreadMessages(threadId, result.data));
+                        dispatch(fetchThreadMessages(threadId, result.data, page));
+                        callback && callback(result);
                     }
                 }
             );

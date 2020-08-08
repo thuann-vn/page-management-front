@@ -108,3 +108,14 @@
     transform-origin: center center;
   }
 }
+
+.rbt-input-multi{
+  &.form-control{
+    height: auto;
+  }
+  
+  .rbt-token{
+    display: inline-block;
+    width: auto;
+  }
+}

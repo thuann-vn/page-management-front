@@ -33,7 +33,7 @@ const Messages = () => {
         <>
             <div class="chat-container">
                 <ThreadList threads={threads} activeItem={activeThread} onItemClick={(item)=>{ setActiveThread(item)}}></ThreadList>
-                <ChatList page_id={'106261714466963'} thread={activeThread}/>
+                <ChatList thread={activeThread}/>
                 <CustomerPanel id={activeThread.id}/>
             </div>
         </>

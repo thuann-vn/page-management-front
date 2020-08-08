@@ -1,7 +1,12 @@
 import React from 'react'
 import Emoji from "react-emoji-render";
 import CIcon from '@coreui/icons-react';
-import { cilClock } from '@coreui/icons';
+import { cilClock, cilWarning } from '@coreui/icons';
+import {
+    CTooltip,
+} from '@coreui/react'
+
+import TimeToReadable from 'timetoreadable';
 const Message = (props) => {
     var className = 'message';
     if (props.position == 'right') {
@@ -25,6 +30,15 @@ const Message = (props) => {
     if (props.data.isSending) {
         className += ' sending';
     }
+
+    if (props.data.sendFailed) {
+        className += ' error';
+    }
+
+    const getTime = () => {
+        return TimeToReadable.Beautify(props.data.created_time);
+    }
+
     const attachmentsRender = (attachments) => {
         if (!attachments) {
             return null;
@@ -45,18 +59,26 @@ const Message = (props) => {
     }
 
     return (
-        <div class={className}>
-            <Emoji text={props.data.message ? props.data.message : ''} />
-            {
-                props.data.sticker && <img src={props.data.sticker} key={props.data.id + '_sticker'} />
-            }
-            {
-                props.data.isSending && <span className="sending-icon"><CIcon content={cilClock} /></span>
-            }
-            {
-                attachmentsRender(props.data.attachments)
-            }
-        </div>
+        <CTooltip
+            content={getTime()}
+            placement={props.position  || 'left'}
+        >
+            <div class={className}>
+                <Emoji text={props.data.message ? props.data.message : ''} />
+                {
+                    props.data.sticker && <img src={props.data.sticker} key={props.data.id + '_sticker'} />
+                }
+                {
+                    props.data.isSending && !props.data.sendFailed && <span className="sending-icon"><CIcon content={cilClock} /></span>
+                }
+                {
+                    props.data.sendFailed && <span className="sending-icon sending-error"><CIcon content={cilWarning} /></span>
+                }
+                {
+                    attachmentsRender(props.data.attachments)
+                }
+            </div>
+        </CTooltip>
     )
 }
 

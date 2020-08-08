@@ -12,8 +12,8 @@ export const FacebookService  = {
             pageId
         });
     },
-    messages: (threadId) => {
-        return api.call('/api/facebook/messages?threadId='+ threadId);
+    messages: (threadId, page = 1) => {
+        return api.call(`/api/facebook/messages?threadId=${threadId}&page=${page}`);
     },
     sendMessage: (data) => {
         return api.call('/api/facebook/postMessage', data, 'POST');
