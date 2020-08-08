@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ReactTimeAgo from 'react-time-ago';
-import { getCustomerFromApi, addCustomerTags, getCustomerTags } from '../../store/actions/customersActions';
+import { getCustomerFromApi, addCustomerTags, getCustomerTags, updateCustomer } from '../../store/actions/customersActions';
 import CIcon from '@coreui/icons-react';
-import { cilBarcode, cilEnvelopeClosed, cilClock, cilInfo } from '@coreui/icons';
-import { CButton, CCollapse, CCardBody } from '@coreui/react';
+import { cilBarcode, cilEnvelopeClosed, cilClock, cilInfo, cilPhone, cilAddressBook, cilDelete, cilTrash } from '@coreui/icons';
+import { CButton, CCollapse, CCardBody, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CPopover, CLink, CDropdown, CDropdownToggle, CDropdownMenu, CCard, CCardHeader, CListGroup, CListGroupItem, CBadge } from '@coreui/react';
 import { Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { fetchTags } from '../../store/actions/tagsActions';
-
+import { CirclePicker, TwitterPicker } from 'react-color';
+import { TagColors, DefaultTagColor } from '../../constants/Colors';
+import { TagService } from '../../services/tag';
+import CustomScroll from 'react-custom-scroll';
 const CustomerPanel = (props) => {
     const { id } = props;
     const customer = useSelector(state => state.customers[id] || { tags: [] });
@@ -15,6 +18,15 @@ const CustomerPanel = (props) => {
     const [tagInputCollapse, setTagInputCollapse] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedTags, setSelectedTags] = useState([]);
+    const [editingTags, setEditingTags] = useState(false);
+
+
+    //New tag input
+    const [newTagName, setNewTagName] = useState('');
+    const [newTagColor, setNewTagColor] = useState(DefaultTagColor);
+    const [tagList, setTagList] = useState([]);
+
+
     const dispatch = useDispatch();
     const tagInputRef = useRef();
 
@@ -58,6 +70,48 @@ const CustomerPanel = (props) => {
         dispatch(addCustomerTags(id, customer.tags));
     }
 
+    const changeAddress = (value) => {
+        if (customer.address != value) {
+            dispatch(updateCustomer(id, { address: value }));
+        }
+    }
+
+    const changePhoneNumber = (value) => {
+        if (value != customer.phone) {
+            dispatch(updateCustomer(id, { phone: value }));
+        }
+    }
+
+    const openTagManage = async () => {
+        setEditingTags(true);
+        const result = await TagService.getTags();
+        setTagList(result);
+    }
+
+    const setTagColor = async (index, color) => {
+        var tags = tagList;
+        tags[index].color = color;
+        setTagList([...tags]);
+
+        TagService.updateTag(tags[index]).then((result) => {
+            if (result && !result.success) {
+                alert('Can not update tag');
+            }
+        });
+    }
+
+    const deleteTag = async (tag, index) => {
+        var tags = tagList;
+        tags.splice(index, 1);
+        setTagList([...tags]);
+
+        TagService.deleteTag(tag._id).then((result) => {
+            if (result && !result.success) {
+                alert('Delete tag failed');
+            }
+        });
+    }
+
     return (
         <div className="customer-panel">
             <div className="customer-name">
@@ -68,15 +122,27 @@ const CustomerPanel = (props) => {
             </div>
             <div className="customer-info">
                 <div className="customer-row">
-                    <CIcon content={cilClock} size="md" />
+                    <CIcon content={cilClock}/>
                     Join&nbsp;<ReactTimeAgo date={customer.last_update} />
                 </div>
                 <div className="customer-row">
-                    <CIcon content={cilEnvelopeClosed} size="md" />
+                    <CIcon content={cilEnvelopeClosed}/>
                     <span>{customer.email}</span>
                 </div>
                 <div className="customer-row">
-                    <CIcon content={cilInfo} size="md" />
+                    <CIcon content={cilPhone}/>
+                    <span>
+                        <CInput placeholder="Enter phone number" value={customer.phone} onBlur={(event) => changePhoneNumber(event.target.value)} />
+                    </span>
+                </div>
+                <div className="customer-row">
+                    <CIcon content={cilAddressBook}/>
+                    <span>
+                        <CInput placeholder="Enter address" value={customer.address} onBlur={(event) => changeAddress(event.target.value)} />
+                    </span>
+                </div>
+                <div className="customer-row">
+                    <CIcon content={cilInfo}/>
                     <span>{customer.id}</span>
                 </div>
             </div>
@@ -84,7 +150,7 @@ const CustomerPanel = (props) => {
             <div className="customer-tags">
                 <div className="customer-panel">
                     <label className="">Tags</label>
-                    <CButton className="btn btn-link btn-block btn-pill active" onClick={() => tagFormToggle()}>Manage</CButton>
+                    <CButton className="btn btn-link btn-block btn-pill active" onClick={() => openTagManage()}>Manage</CButton>
                 </div>
                 <div className="add-tab-container">
                     <CButton className="active btn btn-behance btn-pill btn-sm" onClick={() => tagFormToggle()}>+ Add Tag</CButton>
@@ -114,7 +180,8 @@ const CustomerPanel = (props) => {
                     {
                         customer.tags.map((tag, index) => {
                             return (
-                                <div key={'tag_' + (tag._id ? tag._id : (tag.id ? tag.id: index))} className="btn btn-pill btn-sm btn-secondary" style={{ opacity: tag.customOption ? 0.5 : 1 }}>
+                                <div key={'tag_' + (tag._id ? tag._id : (tag.id ? tag.id : index))} className="btn btn-pill btn-sm btn-secondary" style={{ opacity: tag.customOption ? 0.5 : 1 }}>
+                                    <span className="tag-color" style={{backgroundColor: tag.color || DefaultTagColor}}></span>
                                     {tag.name}
                                     <CButton className="btn-remove btn-link" onClick={() => { removeTag(tag) }}>x</CButton>
                                 </div>
@@ -123,6 +190,56 @@ const CustomerPanel = (props) => {
                     }
                 </div>
             </div>
+            <CModal
+                show={editingTags}
+                onClose={setEditingTags}
+                addContentClass="tags-modal"
+            >
+                <CModalHeader closeButton>
+                    <CModalTitle>Customer Tags</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <div className="add-tag-container">
+                        <CInput placeholder="Add new tag" value={newTagName} onChange={(e) => setNewTagName(e.target.value)}/>
+                        <div className="tag-color-input">
+                            <CDropdown className="m-1">
+                                <CDropdownToggle>
+                                    <span className="selected-color" style={{ backgroundColor: newTagColor }}></span>
+                                </CDropdownToggle>
+                                <CDropdownMenu>
+                                    <CirclePicker circleSpacing={5} colors={TagColors} color={newTagColor} width="198px" onChange={(color) => setNewTagColor(color.hex)} />
+                                </CDropdownMenu>
+                            </CDropdown>
+                        </div>
+                        <CButton className="btn-primary btn-add">Add</CButton>
+                    </div>
+                    <CustomScroll heightRelativeToParent="auto">
+                        <div className="tags-list-container">
+                            <CListGroup>
+                                {
+                                    tagList.map((tag, index) => {
+                                        return (<CListGroupItem className="justify-content-between" key={tag.id}>
+                                            <div className="tag-color-input">
+                                                <CDropdown className="m-1">
+                                                    <CDropdownToggle>
+                                                        <span className="selected-color" style={{ backgroundColor: tag.color || DefaultTagColor }}></span>
+                                                    </CDropdownToggle>
+                                                    <CDropdownMenu>
+                                                        <CirclePicker circleSpacing={5} colors={TagColors} color={tag.color || DefaultTagColor} width="198px" onChange={(color) => setTagColor(index, color.hex)} />
+                                                    </CDropdownMenu>
+                                                </CDropdown>
+                                            </div>
+                                            {tag.name}
+                                            <CIcon onClick={() => deleteTag(tag, index)} className="float-right" content={cilTrash} />
+                                        </CListGroupItem>)
+                                    })
+                                }
+                            </CListGroup>
+                        </div>
+                    </CustomScroll>
+                </CModalBody>
+            </CModal>
+
         </div>
     )
 }

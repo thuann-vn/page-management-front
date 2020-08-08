@@ -26,6 +26,13 @@
 
     .customer-info{
         padding: 15px 30px;
+
+        input{
+            border-color: transparent;
+            background-color: transparent !important;
+            padding: 0;
+            height: auto;
+        }
     }
     .customer-row{
         display: flex;
@@ -84,9 +91,88 @@
             margin-bottom: 2px;
             color: #333;
         }
+
+        .tag-color{
+            width: 14px;
+            height: 14px;
+            border-radius: 100%;
+            display: inline-block;
+            margin-right: 5px;
+            position: relative;
+            top: 3px;
+        }
     }
 
     .add-tag-form{
         margin-top: 10px;
+    }
+
+    .tags-modal{
+        .add-tag-container{
+            position: relative;
+    
+            input.form-control{
+                height: 48px;
+                padding-left: 60px;
+            }
+    
+            .btn-add{
+                position: absolute;
+                right: 8px;
+                top: 6px;
+            }
+    
+            margin-bottom: 10px;
+        }
+
+        .tag-color-input{
+            position: absolute;
+            left: 5px;
+            top: 7px;
+        }
+
+        .selected-color{
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-color: #ccc;
+            border-radius: 100%;
+        }
+
+        .dropdown-toggle{
+            outline: none !important;
+            box-shadow: none !important;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-menu{
+            padding: 5px;
+        }
+
+        .list-group-item{
+            position: relative;
+            padding-left: 60px;
+            height: 48px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-weight: 400;
+
+            .dropdown-toggle:after{
+                opacity: 0;
+            }
+
+            &:hover{
+                .dropdown-toggle:after{
+                    opacity: 1;
+                }
+            }
+        }
+
+        .tags-list-container{
+            max-height: 500px;
+        }
     }
 }

@@ -5,6 +5,7 @@ import { CustomerService } from "../../services/customer";
 export const FETCH_CUSTOMER = 'FETCH_CUSTOMER'
 export const GET_CUSTOMER_TAGS = 'GET_CUSTOMER_TAGS'
 export const ADD_CUSTOMER_TAGS = 'ADD_CUSTOMER_TAGS'
+export const UPDATE_CUSTOMER = 'UPDATE_CUSTOMER'
 
 export const fetchCustomer = (customer) => {
     return {
@@ -52,6 +53,25 @@ export const addCustomerTags = (customerId, tags) => {
                 result => { 
                     if(result){
                         dispatch(getCustomerTags(customerId));
+                    }
+                }
+            );
+    };
+}
+
+export const updateCustomer = (customerId, data) => {
+    return dispatch => {
+        CustomerService.updateCustomer(customerId, data)
+            .then(
+                result => { 
+                    if(result){
+                        dispatch({
+                            type: UPDATE_CUSTOMER,
+                            payload: {
+                                id: customerId,
+                                data: data
+                            }
+                        });
                     }
                 }
             );
