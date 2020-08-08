@@ -1,6 +1,9 @@
 import api from "./api"
 
 export const TagService  = {
+    createTag: (data) =>{
+        return api.call(`/api/tags`, data, 'POST')
+    },
     getTags: (excludes = [])=>{
         return api.call(`/api/tags?excludes=${excludes.join(',')}`);
     },

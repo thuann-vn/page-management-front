@@ -46,7 +46,7 @@ export const getCustomerTags = (customerId)=>{
     };
 }
 
-export const addCustomerTags = (customerId, tags) => {
+export const updateCustomerTags = (customerId, tags) => {
     return dispatch => {
         CustomerService.addTags(customerId, tags)
             .then(

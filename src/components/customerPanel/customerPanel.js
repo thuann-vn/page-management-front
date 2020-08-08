@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ReactTimeAgo from 'react-time-ago';
-import { getCustomerFromApi, addCustomerTags, getCustomerTags, updateCustomer } from '../../store/actions/customersActions';
+import { getCustomerFromApi, updateCustomerTags, getCustomerTags, updateCustomer } from '../../store/actions/customersActions';
 import CIcon from '@coreui/icons-react';
 import { cilBarcode, cilEnvelopeClosed, cilClock, cilInfo, cilPhone, cilAddressBook, cilDelete, cilTrash } from '@coreui/icons';
 import { CButton, CCollapse, CCardBody, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CPopover, CLink, CDropdown, CDropdownToggle, CDropdownMenu, CCard, CCardHeader, CListGroup, CListGroupItem, CBadge } from '@coreui/react';
@@ -58,7 +58,7 @@ const CustomerPanel = (props) => {
             ...addTags
         ]
         customer.tags = newTags;
-        dispatch(addCustomerTags(id, newTags));
+        dispatch(updateCustomerTags(id, newTags));
     }
 
     const removeTag = (tag) => {
@@ -67,7 +67,7 @@ const CustomerPanel = (props) => {
         }
         const index = customer.tags.findIndex((item) => item._id == tag._id);
         customer.tags.splice(index, 1);
-        dispatch(addCustomerTags(id, customer.tags));
+        dispatch(updateCustomerTags(id, customer.tags));
     }
 
     const changeAddress = (value) => {
@@ -96,7 +96,11 @@ const CustomerPanel = (props) => {
         TagService.updateTag(tags[index]).then((result) => {
             if (result && !result.success) {
                 alert('Can not update tag');
+                return;
             }
+
+            const customerTagIndex = customer.tags.findIndex((item) => item._id == tags[index]._id);
+            customer.tags[customerTagIndex].color = color;
         });
     }
 
@@ -108,8 +112,29 @@ const CustomerPanel = (props) => {
         TagService.deleteTag(tag._id).then((result) => {
             if (result && !result.success) {
                 alert('Delete tag failed');
-            }
+                return;
+            }else{
+                const customerTagIndex = customer.tags.findIndex((item) => item._id == tag._id);
+                customer.tags.splice(customerTagIndex, 1);
+            }    
         });
+    }
+
+    const addNewTag = async ()=>{
+        if(!newTagName){
+            return;
+        }
+
+        TagService.createTag({
+            name: newTagName,
+            color: newTagColor
+        }).then(result=>{
+            if(result){
+                setTagList([...tags, result]);
+                setNewTagName('');
+                setNewTagColor(DefaultTagColor);
+            }
+        })
     }
 
     return (
@@ -211,7 +236,7 @@ const CustomerPanel = (props) => {
                                 </CDropdownMenu>
                             </CDropdown>
                         </div>
-                        <CButton className="btn-primary btn-add">Add</CButton>
+                        <CButton className="btn-primary btn-add" onClick={addNewTag}>Add</CButton>
                     </div>
                     <CustomScroll heightRelativeToParent="auto">
                         <div className="tags-list-container">
