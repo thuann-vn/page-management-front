@@ -1,0 +1,183 @@
+.order-modal{
+    .modal-body{
+        padding: 0
+    }
+    .add-product-container{
+        padding: 10px;
+
+        .add-product-input{
+            margin-bottom: 10px;
+            position: relative;
+
+            input.form-control{
+                height: 48px;
+                padding-left: 60px;
+            }
+    
+            .btn-add{
+                position: absolute;
+                right: 8px;
+                top: 6px;
+            }
+    
+            .c-icon{
+                width: 24px;
+                height: 24px;
+                position: absolute;
+                top: 12px;
+                left: 10px;
+            }
+        }
+    }
+
+    .tag-color-input{
+        position: absolute;
+        left: 5px;
+        top: 7px;
+    }
+
+    .selected-color{
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        background-color: #ccc;
+        border-radius: 100%;
+    }
+
+    .dropdown-toggle{
+        outline: none !important;
+        box-shadow: none !important;
+        padding: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .dropdown-menu{
+        padding: 5px;
+    }
+
+    .product-list-container{
+        min-height: 150px;
+        max-height: 300px;
+        background-color: #F5F6F7;
+        padding: 10px;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+
+        .order-empty{
+            color: #ccc;
+            font-weight: 300;
+            text-align: center;
+            display: block;
+            padding-top: 50px;
+        }
+
+        .list-group-item{
+            position: relative;
+            padding-left: 60px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-weight: 400;
+            border-radius: 0;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border: none;
+            border-bottom: 1px solid #efefef;
+
+            &:last-child{
+                border-bottom: none;
+            }
+        }
+
+        
+        .product-image{
+            position: absolute;
+            left: 0;
+            display: flex;
+            align-items: center;
+            align-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            overflow: hidden;
+
+            img{
+                width: 100%;
+                height: auto;
+                min-height: 100%;
+            }
+        }
+
+        .product-quantity{
+            width: 100px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .product-detail{
+            flex: 1;
+        }
+    }
+
+    .order-total-container{
+        padding: 10px;
+        .order-total-row{
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    .image-uploader{
+        border: 2px dashed #dddfe2;
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        justify-content: center;
+        margin-bottom: 20px;
+        cursor: pointer;
+        border-radius: 4px;
+
+        > *{
+            cursor: pointer;
+        }
+
+
+        &:hover{
+            opacity: .9;
+            background: rgba(0,0,0,.1);
+        }
+
+        input{
+            opacity: 0;
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        > span{
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        img{
+            width: 100%;
+            height: auto;
+            position: absolute;
+        }
+
+        .cil-icon{
+            width: 24px;
+            height: 32px;
+        }
+    }
+}

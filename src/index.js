@@ -13,7 +13,9 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import {store, persistor} from './store/index'
 import JavascriptTimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
+import vi from 'javascript-time-ago/locale/vi';
 JavascriptTimeAgo.addLocale(en);
+JavascriptTimeAgo.addLocale(vi);
 
 React.icons = icons
 ReactDOM.render(

@@ -7,12 +7,11 @@ export default {
      * data
      * method: GET, POST, PUT, UPLOAD, DELETE
      */
-    call: async (url, data = {}, method = 'GET') => {
+    call: async (url, data = {}, method = 'GET', contentType = 'application/json') => {
         let options = {
             method: method,
             headers: {
-                'X-Requested-With' : 'XMLHttpRequest',
-                'Content-Type': 'application/json'
+                'X-Requested-With' : 'XMLHttpRequest'
             }
         }
 
@@ -23,9 +22,15 @@ export default {
         }
 
         //Check if POST or PUT => send json
-        if(method.toUpperCase() == 'POST' || method.toUpperCase() == 'PUT'){
-            options.body = JSON.stringify(data);
+        if(contentType == 'application/json'){
+            options.headers['Content-Type'] = contentType;
+            if((method.toUpperCase() == 'POST' || method.toUpperCase() == 'PUT')){
+                options.body = JSON.stringify(data);
+            }
+        }else{
+            options.body = data;
         }
+
         //Call fetch
         return fetch(CONFIG.apiUrl + url, options).then((response) => {
             try{

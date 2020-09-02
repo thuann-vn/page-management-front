@@ -4,13 +4,14 @@ import ReactTimeAgo from 'react-time-ago';
 import { getCustomerFromApi, updateCustomerTags, getCustomerTags, updateCustomer } from '../../store/actions/customersActions';
 import CIcon from '@coreui/icons-react';
 import { cilBarcode, cilEnvelopeClosed, cilClock, cilInfo, cilPhone, cilAddressBook, cilDelete, cilTrash } from '@coreui/icons';
-import { CButton, CCollapse, CCardBody, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CPopover, CLink, CDropdown, CDropdownToggle, CDropdownMenu, CCard, CCardHeader, CListGroup, CListGroupItem, CBadge } from '@coreui/react';
+import { CButton, CCollapse, CCardBody, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CPopover, CLink, CDropdown, CDropdownToggle, CDropdownMenu, CCard, CCardHeader, CListGroup, CListGroupItem, CBadge, CButtonGroup } from '@coreui/react';
 import { Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { fetchTags } from '../../store/actions/tagsActions';
 import { CirclePicker, TwitterPicker } from 'react-color';
 import { TagColors, DefaultTagColor } from '../../constants/Colors';
 import { TagService } from '../../services/tag';
 import CustomScroll from 'react-custom-scroll';
+import AddOrderModal from '../orders/addOrderModal';
 const CustomerPanel = (props) => {
     const { id } = props;
     const customer = useSelector(state => state.customers[id] || { tags: [] });
@@ -95,7 +96,7 @@ const CustomerPanel = (props) => {
 
         TagService.updateTag(tags[index]).then((result) => {
             if (result && !result.success) {
-                alert('Can not update tag');
+                alert('Cập nhật thẻ không thành công');
                 return;
             }
 
@@ -111,7 +112,7 @@ const CustomerPanel = (props) => {
 
         TagService.deleteTag(tag._id).then((result) => {
             if (result && !result.success) {
-                alert('Delete tag failed');
+                alert('Xóa thẻ không thành công!');
                 return;
             }else{
                 const customerTagIndex = customer.tags.findIndex((item) => item._id == tag._id);
@@ -141,6 +142,8 @@ const CustomerPanel = (props) => {
         <div className="customer-panel">
             <div className="customer-name">
                 {customer.name}
+
+                <CIcon content={cilInfo}></CIcon>
             </div>
             <div className="customer-avatar">
                 <div class="pic" style={{ backgroundImage: `url("${customer.avatar ? customer.avatar : '/avatars/default.jpg'}")` }}></div>
@@ -148,7 +151,7 @@ const CustomerPanel = (props) => {
             <div className="customer-info">
                 <div className="customer-row">
                     <CIcon content={cilClock}/>
-                    Join&nbsp;<ReactTimeAgo date={customer.last_update} />
+                    Bắt đầu từ&nbsp;<ReactTimeAgo date={customer.last_update} locale="vi"/>
                 </div>
                 <div className="customer-row">
                     <CIcon content={cilEnvelopeClosed}/>
@@ -157,28 +160,34 @@ const CustomerPanel = (props) => {
                 <div className="customer-row">
                     <CIcon content={cilPhone}/>
                     <span>
-                        <CInput placeholder="Enter phone number" value={customer.phone} onBlur={(event) => changePhoneNumber(event.target.value)} />
+                        <CInput placeholder="Nhập số điện thoại" value={customer.phone} onBlur={(event) => changePhoneNumber(event.target.value)} />
                     </span>
                 </div>
                 <div className="customer-row">
                     <CIcon content={cilAddressBook}/>
                     <span>
-                        <CInput placeholder="Enter address" value={customer.address} onBlur={(event) => changeAddress(event.target.value)} />
+                        <CInput placeholder="Nhập địa chỉ" value={customer.address} onBlur={(event) => changeAddress(event.target.value)} />
                     </span>
                 </div>
                 <div className="customer-row">
                     <CIcon content={cilInfo}/>
                     <span>{customer.id}</span>
                 </div>
+                <div className="customer-row">
+                    <CButtonGroup size="lg">
+                    <CButton color="primary">Tạo đơn hàng</CButton>
+                    <CButton color="primary">Xem lịch sử</CButton>
+                    </CButtonGroup>
+                </div>
             </div>
             <hr />
             <div className="customer-tags">
                 <div className="customer-panel">
-                    <label className="">Tags</label>
-                    <CButton className="btn btn-link btn-block btn-pill active" onClick={() => openTagManage()}>Manage</CButton>
+                    <label className="">Thẻ</label>
+                    <CButton className="btn btn-link btn-block btn-pill active" onClick={() => openTagManage()}>Quản lý</CButton>
                 </div>
                 <div className="add-tab-container">
-                    <CButton className="active btn btn-behance btn-pill btn-sm" onClick={() => tagFormToggle()}>+ Add Tag</CButton>
+                    <CButton className="active btn btn-behance btn-pill btn-sm" onClick={() => tagFormToggle()}>+ Thêm thẻ</CButton>
                     <CCollapse show={tagInputCollapse}>
                         <div className="add-tag-form">
                             <AsyncTypeahead
@@ -188,7 +197,7 @@ const CustomerPanel = (props) => {
                                 minLength={0}
                                 onSearch={handleSearch}
                                 ref={tagInputRef}
-                                placeholder="Add new tags..."
+                                placeholder="Nhập tên thẻ..."
                                 newSelectionPrefix="+ "
                                 allowNew
                                 selected={selectedTags}
@@ -221,11 +230,11 @@ const CustomerPanel = (props) => {
                 addContentClass="tags-modal"
             >
                 <CModalHeader closeButton>
-                    <CModalTitle>Customer Tags</CModalTitle>
+                    <CModalTitle>Quản lý thẻ</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
                     <div className="add-tag-container">
-                        <CInput placeholder="Add new tag" value={newTagName} onChange={(e) => setNewTagName(e.target.value)}/>
+                        <CInput placeholder="Nhập thẻ mới" value={newTagName} onChange={(e) => setNewTagName(e.target.value)}/>
                         <div className="tag-color-input">
                             <CDropdown className="m-1">
                                 <CDropdownToggle>
@@ -236,7 +245,7 @@ const CustomerPanel = (props) => {
                                 </CDropdownMenu>
                             </CDropdown>
                         </div>
-                        <CButton className="btn-primary btn-add" onClick={addNewTag}>Add</CButton>
+                        <CButton className="btn-primary btn-add" onClick={addNewTag}>Thêm</CButton>
                     </div>
                     <CustomScroll heightRelativeToParent="auto">
                         <div className="tags-list-container">
@@ -264,7 +273,7 @@ const CustomerPanel = (props) => {
                     </CustomScroll>
                 </CModalBody>
             </CModal>
-
+            <AddOrderModal customerId={customer.id}/>
         </div>
     )
 }
