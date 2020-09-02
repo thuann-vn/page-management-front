@@ -151,7 +151,7 @@ const CustomerPanel = (props) => {
             <div className="customer-info">
                 <div className="customer-row">
                     <CIcon content={cilClock}/>
-                    Bắt đầu từ&nbsp;<ReactTimeAgo date={customer.last_update} locale="vi"/>
+                    Bắt đầu từ&nbsp;<ReactTimeAgo date={customer.last_update || new Date()} locale="vi"/>
                 </div>
                 <div className="customer-row">
                     <CIcon content={cilEnvelopeClosed}/>

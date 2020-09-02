@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getCustomerFromApi, getCustomerTags } from '../../store/actions/customersActions';
 import CIcon from '@coreui/icons-react';
 import { cilTrash, cilKeyboard, cilPlus, cilSatelite, cilImage, cilSearch } from '@coreui/icons';
-import { CButton, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CDropdown, CDropdownToggle, CDropdownMenu, CListGroup, CListGroupItem, CTabs, CNav, CTabContent, CTabPane, CFormGroup, CLabel, CCol, CTextarea, CModalFooter, CInvalidFeedback, CAlert } from '@coreui/react';
+import { CButton, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CDropdown, CDropdownToggle, CDropdownMenu, CListGroup, CListGroupItem, CTabs, CNav, CTabContent, CTabPane, CFormGroup, CLabel, CCol, CTextarea, CModalFooter, CInvalidFeedback, CAlert, CCollapse } from '@coreui/react';
 import { CirclePicker } from 'react-color';
 import { TagColors, DefaultTagColor } from '../../constants/Colors';
 import { TagService } from '../../services/tag';
@@ -26,8 +26,13 @@ const AddOrderModal = (props) => {
     const [orderDetails, setOrderDetails] = useState([]);
     const [subtotal, setSubTotal] = useState(0);
     const [shipping, setShipping] = useState(0);
+    const [shippingNote, setShippingNote] = useState('');
+    const [shippingShow, setShippingShow] = useState(false);
     const [discount, setDiscount] = useState(0);
+    const [discountShow, setDiscountShow] = useState(false);
+    const [discountNote, setDiscountNote] = useState('');
     const [total, setTotal] = useState(0);
+    const [note, setNote] = useState('');
     const [savingOrder, setSavingOrder] = useState(false);
 
     //Product input
@@ -52,15 +57,14 @@ const AddOrderModal = (props) => {
         }
     }, [id]);
 
-    const toggleAddProductTab = () => {
-        setActiveTab(activeTab == 0 ? 1: 0);
-    }
-
     const searchProduct = (query) => {
+        setIsLoadingProduct(true);
         ProductService.searchProducts(query).then((result)=>{
             if(result.success){
                 setSearchingProducts(result.data);
             }
+        }).finally(()=>{
+            setIsLoadingProduct(false);
         })
     }
     
@@ -103,11 +107,10 @@ const AddOrderModal = (props) => {
                 setSuccessMessage('Tạo sản phẩm thành công!');
                 
                 //Add to product
-                setSelectedProduct(response.data);
-                addOrderProduct();
+                addOrderProduct(response.data);
 
                 //Switch back to order tab
-                toggleAddProductTab();
+                setActiveTab(0);
             }else{
                 setSuccessMessage('');
                 setErrorMessage('Tạo sản phẩm không thành công, vui lòng thử lại!');
@@ -122,20 +125,22 @@ const AddOrderModal = (props) => {
 
     const onSelectProduct = (selected)=>{
         if(selected && selected.length && selected[0].customOption){
-            toggleAddProductTab();
+            setActiveTab(1);
             setNewProductName(selected[0].name);
         }else{
             setSelectedProduct(selected ? selected : [])
         }
     }
 
-    const addOrderProduct = () =>{
-        if(!selectedProduct.length){
+    const addOrderProduct = (product = null) =>{
+        if(!product && !selectedProduct.length){
             return;
         }
         var newOrderDetails = [...orderDetails];
-        var product = selectedProduct[0];
-        var existedIndex = newOrderDetails.findIndex(item => item.product_id == product._id);
+        if(!product){
+            product = selectedProduct[0];
+        }
+        var existedIndex = newOrderDetails.findIndex(item => item.product_id == product.id);
         if(existedIndex >=0){
             newOrderDetails[existedIndex].quantity+=1;
         }else{
@@ -144,7 +149,7 @@ const AddOrderModal = (props) => {
                 {
                     ...product,
                     id: null,
-                    product_id: product._id,
+                    product_id: product.id,
                     quantity: 1
                 }
             ]
@@ -183,10 +188,22 @@ const AddOrderModal = (props) => {
             discount: discount,
             shipping: shipping,
             total: total,
+            discount_note: discountNote,
+            shipping_note: shippingNote,
+            note: note,
             products: orderDetails
         });
         console.log(response);
+
         setSavingOrder(false);
+        setOrderDetails([]);
+        setTotal(0);
+        setSubTotal(0);
+        setDiscount(0);
+        setDiscountShow(false);
+        setShippingShow(false);
+        setDiscountNote('');
+        setShippingNote('');
         alert('Success');
     }
 
@@ -225,8 +242,21 @@ const AddOrderModal = (props) => {
                                             selectHintOnEnter={true}
                                             autoFocus={true}
                                             searchText={''}
+                                            renderMenuItemChildren  = {(item)=>{
+                                                return (
+                                                    <div className="product-search-item" key={item.id}> 
+                                                        <div className="product-image">
+                                                            <img src={item.image ? `${Config.apiUrl}/${item.image}` : '/images/default_product.jpg'}/>
+                                                        </div>
+                                                        <div>
+                                                            {item.name}<br/>
+                                                            <MoneyFormat value={item.price}/>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }}
                                         />
-                                        <CIcon content={cilSearch} />
+                                        {!isLoadingProduct ? <CIcon content={cilSearch} /> : null}
                                         <CButton className="btn-primary btn-add" onClick={addOrderProduct} disabled={!selectedProduct.length}>Thêm</CButton>
                                     </div>
                                 </div>
@@ -255,62 +285,124 @@ const AddOrderModal = (props) => {
                                         </CListGroup>
                                     </div>
                                 </CustomScroll>
-                                <div className="order-total-container">
-                                    <div className="order-total-row">
-                                        <label>Tổng tiền</label>
-                                        <MoneyFormat  value={total}/>
+                                <CCollapse show={subtotal>0}>
+                                    <div className="order-total-container">
+                                        <div className="order-total-row">
+                                            <label>Tiền hàng</label>
+                                            <MoneyFormat  value={subtotal}/>
+                                        </div>
+                                        <div className="order-total-row">
+                                            <div>
+                                                <label>Giảm giá</label>
+                                                {
+                                                discountNote && !discountShow ? (<span className="discount-note text-muted">(Lý do: {discountNote})</span>) : null
+                                                }
+                                            </div>
+                                            <CButton className="btn btn-link" onClick={() => setDiscountShow(!discountShow)}>{discountShow ? 'Đóng' : (discount <= 0 ? 'Thêm giảm giá' : (<MoneyFormat value={discount}/>))}</CButton>
+                                        </div>
+                                        <CCollapse show={discountShow}>
+                                            <div className="discount-container">
+                                                <CFormGroup>
+                                                    <CurrencyInput
+                                                        id="price"
+                                                        name="price"
+                                                        placeholder="Nhập tiền..."
+                                                        defaultValue={0}
+                                                        allowDecimals={false}
+                                                        decimalsLimit={0}
+                                                        className={"form-control" + (newProductErrorShow && !newProductPrice > 0 ? ' is-invalid' : '') }
+                                                        prefix={Config.currencySymbol + ' '}
+                                                        onChange={(value, name) => setDiscount(parseInt(value) || 0)}
+                                                        value={discount}
+                                                    />
+                                                </CFormGroup>
+                                                <CFormGroup>
+                                                    <CTextarea placeholder="Lý do giảm giá" multiple={true} rows={2} value={discountNote} onChange={(e) => setDiscountNote(e.target.value)}></CTextarea>
+                                                </CFormGroup>
+                                            </div>
+                                        </CCollapse>
+                                        <div className="order-total-row">
+                                            <div>
+                                                <label>Phí vận chuyển</label>
+                                                {
+                                                shippingNote && !shippingShow ? (<span className="discount-note text-muted">({shippingNote})</span>) : null
+                                                }
+                                            </div>
+                                            <CButton className="btn btn-link" onClick={() => setShippingShow(!shippingShow)}>{shippingShow ? 'Đóng' : (shipping <= 0 ? 'Thêm phí vận chuyển' : (<MoneyFormat value={shipping}/>))}</CButton>
+                                        </div>
+                                        <CCollapse show={shippingShow}>
+                                            <div className="shipping-container">
+                                                <CFormGroup>
+                                                    <CurrencyInput
+                                                        id="price"
+                                                        name="price"
+                                                        placeholder="Nhập tiền..."
+                                                        defaultValue={0}
+                                                        allowDecimals={false}
+                                                        decimalsLimit={0}
+                                                        className={"form-control" + (newProductErrorShow && !newProductPrice > 0 ? ' is-invalid' : '') }
+                                                        prefix={Config.currencySymbol + ' '}
+                                                        onChange={(value, name) => setShipping(parseInt(value) || 0)}
+                                                        value={shipping}
+                                                    />
+                                                </CFormGroup>
+                                                <CFormGroup>
+                                                    <CTextarea placeholder="Mã vận đơn" multiple={true} rows={2} value={shippingNote} onChange={(e) => setShippingNote(e.target.value)}></CTextarea>
+                                                </CFormGroup>
+                                            </div>
+                                        </CCollapse>
+                                        <div className="order-total-row">
+                                            <label>Tổng tiền</label>
+                                            <MoneyFormat  value={total}/>
+                                        </div>
+                                        <div className="order-total-row order-note-row">
+                                            <label>Ghi chú</label>
+                                            <CFormGroup>
+                                                <CTextarea placeholder="" multiple={true} rows={2} value={note} onChange={(e) => setNote(e.target.value)}></CTextarea>
+                                            </CFormGroup>
+                                        </div>
                                     </div>
-                                    <div className="order-total-row">
-                                        <label>Giảm giá</label>
-                                        <span>0</span>
-                                    </div>
-                                    <div className="order-total-row">
-                                        <label>Phí vận chuyển</label>
-                                        <span>0</span>
-                                    </div>
-                                    <div className="order-total-row">
-                                        <label>Ghi Chú</label>
-                                        <span></span>
-                                    </div>
-                                </div>
+                                </CCollapse>
                             </div>
                         </CTabPane>
                         <CTabPane>
-                            {successMessage && (<CAlert color="primary">{successMessage}</CAlert>)}
-                            {errorMessage && (<CAlert color="danger">{errorMessage}</CAlert>)}
-                            <div className="image-uploader">
-                                <span>
-                                    <CIcon content={cilImage}/>
-                                    Thêm ảnh
-                                </span>
-                                <input type="file" onChange={handleImageChange}/>
-                                {newProductImage && <img src={window.URL.createObjectURL(newProductImage)}/>}    
+                            <div className="add-product-container">
+                                {successMessage && (<CAlert color="primary">{successMessage}</CAlert>)}
+                                {errorMessage && (<CAlert color="danger">{errorMessage}</CAlert>)}
+                                <div className="image-uploader">
+                                    <span>
+                                        <CIcon content={cilImage}/>
+                                        Thêm ảnh
+                                    </span>
+                                    <input type="file" onChange={handleImageChange}/>
+                                    {newProductImage && <img src={window.URL.createObjectURL(newProductImage)}/>}    
+                                </div>
+                                <CFormGroup>
+                                    <CLabel htmlFor="name">Tên sản phẩm</CLabel>
+                                    <CInput id="name" placeholder="Nhập tên sản phẩm..." size="lg" value={newProductName}  onChange={(e) => setNewProductName(e.target.value)} invalid={newProductErrorShow && !newProductName}/>
+                                    {newProductErrorShow && !newProductName && (<CInvalidFeedback>Vui lòng nhập tên sản phẩm</CInvalidFeedback>)}
+                                </CFormGroup>
+                                <CFormGroup>
+                                    <CLabel htmlFor="price">Giá bán</CLabel>
+                                    <CurrencyInput
+                                        id="price"
+                                        name="price"
+                                        placeholder="Nhập tiền..."
+                                        defaultValue={0}
+                                        allowDecimals={false}
+                                        decimalsLimit={0}
+                                        className={"form-control" + (newProductErrorShow && !newProductPrice > 0 ? ' is-invalid' : '') }
+                                        prefix={Config.currencySymbol + ' '}
+                                        onChange={(value, name) => setNewProductPrice(value)}
+                                        value={newProductPrice}
+                                    />
+                                    {newProductErrorShow && !newProductPrice > 0 && (<CInvalidFeedback>Vui lòng nhập giá sản phẩm</CInvalidFeedback>)}
+                                </CFormGroup>
+                                <CFormGroup>
+                                    <CLabel htmlFor="description">Mô tả</CLabel>
+                                    <CTextarea id="description" placeholder="Mô tả" multiple={true} rows={2} value={newProductDescription} onChange={(e) => setNewProductDescription(e.target.value)}></CTextarea>
+                                </CFormGroup>
                             </div>
-                            <CFormGroup>
-                                <CLabel htmlFor="name">Tên sản phẩm</CLabel>
-                                <CInput id="name" placeholder="Nhập tên sản phẩm..." size="lg" value={newProductName}  onChange={(e) => setNewProductName(e.target.value)} invalid={newProductErrorShow && !newProductName}/>
-                                {newProductErrorShow && !newProductName && (<CInvalidFeedback>Vui lòng nhập tên sản phẩm</CInvalidFeedback>)}
-                            </CFormGroup>
-                            <CFormGroup>
-                                <CLabel htmlFor="price">Giá bán</CLabel>
-                                <CurrencyInput
-                                    id="price"
-                                    name="price"
-                                    placeholder="Nhập tiền..."
-                                    defaultValue={0}
-                                    allowDecimals={false}
-                                    decimalsLimit={0}
-                                    className={"form-control" + (newProductErrorShow && !newProductPrice > 0 ? ' is-invalid' : '') }
-                                    prefix={Config.currencySymbol + ' '}
-                                    onChange={(value, name) => setNewProductPrice(value)}
-                                    value={newProductPrice}
-                                />
-                                {newProductErrorShow && !newProductPrice > 0 && (<CInvalidFeedback>Vui lòng nhập giá sản phẩm</CInvalidFeedback>)}
-                            </CFormGroup>
-                            <CFormGroup>
-                                <CLabel htmlFor="description">Mô tả</CLabel>
-                                <CTextarea id="description" placeholder="Mô tả" multiple={true} rows={2} value={newProductDescription} onChange={(e) => setNewProductDescription(e.target.value)}></CTextarea>
-                            </CFormGroup>
                         </CTabPane>
                     </CTabContent>
                 </CTabs>
@@ -321,9 +413,9 @@ const AddOrderModal = (props) => {
                     <CModalFooter>
                         <CButton 
                         color="secondary" 
-                        onClick={() => toggleAddProductTab()}
+                        onClick={() => setOpening(false)}
                         >Hủy</CButton>
-                        <CButton color="primary" disabled={savingOrder} onClick={()=>createOrder()}>{savingOrder ? 'Đang tạo...' : 'Tạo đơn hàng'} </CButton>
+                        <CButton color="primary" disabled={savingOrder || total <= 0} onClick={()=>createOrder()}>{savingOrder ? 'Đang tạo...' : 'Tạo đơn hàng'} </CButton>
                     </CModalFooter>
                 )
             }
@@ -332,7 +424,7 @@ const AddOrderModal = (props) => {
                     <CModalFooter>
                         <CButton 
                         color="secondary" 
-                        onClick={() => toggleAddProductTab()}
+                        onClick={() => setActiveTab(0)}
                         >Hủy</CButton>
                         <CButton color="primary" disabled={addingProduct} onClick={()=>addProduct()}>{addingProduct ? 'Đang thêm...' : 'Thêm mới'} </CButton>
                     </CModalFooter>

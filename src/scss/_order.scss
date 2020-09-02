@@ -11,7 +11,7 @@
 
             input.form-control{
                 height: 48px;
-                padding-left: 60px;
+                padding-left: 45px;
             }
     
             .btn-add{
@@ -26,6 +26,27 @@
                 position: absolute;
                 top: 12px;
                 left: 10px;
+            }
+
+            .rbt-aux{
+                position: absolute;
+                left: 15px;
+                top: 15px;
+            }
+
+            .dropdown-item{
+                border-bottom: 1px solid #ccc;
+
+                .product-search-item{
+                    position: relative;
+                    padding-left: 60px;
+                    display: block;
+                    min-height: 48px;
+                }
+
+                &:last-child{
+                    border-bottom: 0;
+                }
             }
         }
     }
@@ -54,6 +75,28 @@
 
     .dropdown-menu{
         padding: 5px;
+    }
+
+    .add-product-container{
+        padding: 10px
+    }
+        
+    .product-image{
+        position: absolute;
+        left: 0;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 4px;
+        overflow: hidden;
+
+        img{
+            width: 100%;
+            height: auto;
+            min-height: 100%;
+        }
     }
 
     .product-list-container{
@@ -90,25 +133,6 @@
             }
         }
 
-        
-        .product-image{
-            position: absolute;
-            left: 0;
-            display: flex;
-            align-items: center;
-            align-content: center;
-            width: 48px;
-            height: 48px;
-            border-radius: 4px;
-            overflow: hidden;
-
-            img{
-                width: 100%;
-                height: auto;
-                min-height: 100%;
-            }
-        }
-
         .product-quantity{
             width: 100px;
             margin-left: 10px;
@@ -120,11 +144,35 @@
         }
     }
 
+    .btn-link{
+        padding: 0
+    }
+
+    .discount-note{
+        display: inline-block;
+        margin-left: 5px;
+    }
+
     .order-total-container{
         padding: 10px;
         .order-total-row{
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+
+            label{
+                margin-bottom: 0;
+            }
+
+            &.order-note-row{
+                align-items: flex-start;
+                
+                .form-group{
+                    flex: 1;
+                    margin-left: 50px
+                }
+            }
         }
     }
 
