@@ -229,3 +229,17 @@
         }
     }
 }
+
+.order-row{
+    display: flex;
+    padding: 7px 15px;
+    align-items: center;
+
+    .order-info{
+        flex: 1;
+    }
+
+    .order-price{
+        padding-left: 10px;
+    }
+}

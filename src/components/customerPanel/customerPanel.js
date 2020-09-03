@@ -12,22 +12,28 @@ import { TagColors, DefaultTagColor } from '../../constants/Colors';
 import { TagService } from '../../services/tag';
 import CustomScroll from 'react-custom-scroll';
 import AddOrderModal from '../orders/addOrderModal';
+import { fetchCustomerOrders } from '../../store/actions/ordersActions';
+import MoneyFormat from '../MoneyFormat';
+import OrderRow from '../orders/orderRow';
 const CustomerPanel = (props) => {
     const { id } = props;
     const customer = useSelector(state => state.customers[id] || { tags: [] });
     const tags = useSelector(state => state.tags || []);
+    const orders = useSelector(state => state.orders[id] || []);
     const [tagInputCollapse, setTagInputCollapse] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedTags, setSelectedTags] = useState([]);
     const [editingTags, setEditingTags] = useState(false);
-
 
     //New tag input
     const [newTagName, setNewTagName] = useState('');
     const [newTagColor, setNewTagColor] = useState(DefaultTagColor);
     const [tagList, setTagList] = useState([]);
 
+    //Orders
+    const [orderModalShow, setOrderModalShow] = useState(false);
 
+    console.log('ORDERS', orders);
     const dispatch = useDispatch();
     const tagInputRef = useRef();
 
@@ -35,6 +41,7 @@ const CustomerPanel = (props) => {
         if (id) {
             dispatch(getCustomerFromApi(id));
             dispatch(getCustomerTags(id));
+            dispatch(fetchCustomerOrders(id));
         }
     }, [id]);
 
@@ -173,12 +180,6 @@ const CustomerPanel = (props) => {
                     <CIcon content={cilInfo}/>
                     <span>{customer.id}</span>
                 </div>
-                <div className="customer-row">
-                    <CButtonGroup size="lg">
-                    <CButton color="primary">Tạo đơn hàng</CButton>
-                    <CButton color="primary">Xem lịch sử</CButton>
-                    </CButtonGroup>
-                </div>
             </div>
             <hr />
             <div className="customer-tags">
@@ -273,7 +274,23 @@ const CustomerPanel = (props) => {
                     </CustomScroll>
                 </CModalBody>
             </CModal>
-            <AddOrderModal customerId={customer.id}/>
+
+            <div className="customer-orders">
+                <div className="customer-panel">
+                    <label className="">Đơn hàng</label>
+                    <CButton className="active btn btn-behance btn-pill btn-sm" onClick={() => setOrderModalShow(true)}>+ Tạo đơn hàng</CButton>
+                </div>
+                <div className="order-list">
+                    {
+                        orders.map((order)=>{
+                            return (
+                                <OrderRow data={order} key={"order_" + order.id}/>
+                            )
+                        })
+                    }
+                </div>
+            </div>
+            <AddOrderModal opening={orderModalShow} onStateChange={(state)=>{setOrderModalShow(state)}} customerId={customer.id} />
         </div>
     )
 }

@@ -18,7 +18,7 @@ import { OrderService } from '../../services/order';
 
 const AddOrderModal = (props) => {
     const { id, customerId } = props;
-    const [opening, setOpening] = useState(true);
+    const [opening, setOpening] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
     const [searchingProducts, setSearchingProducts] = useState([]);
     
@@ -50,12 +50,21 @@ const AddOrderModal = (props) => {
     const [newProductErrorShow, setNewProductErrorShow] = useState(false);
     const [addingProduct, setAddingProduct] = useState(false);
     const dispatch = useDispatch();
+
+    //Track ID
     useEffect(() => {
         if (id) {
             dispatch(getCustomerFromApi(id));
             dispatch(getCustomerTags(id));
         }
     }, [id]);
+
+    useEffect(() => {
+        if(props.opening != opening){
+            setOpening(props.opening);
+            resetData();
+        }
+    }, [props.opening]);
 
     const searchProduct = (query) => {
         setIsLoadingProduct(true);
@@ -140,6 +149,7 @@ const AddOrderModal = (props) => {
         if(!product){
             product = selectedProduct[0];
         }
+        console.log(product);
         var existedIndex = newOrderDetails.findIndex(item => item.product_id == product.id);
         if(existedIndex >=0){
             newOrderDetails[existedIndex].quantity+=1;
@@ -193,8 +203,15 @@ const AddOrderModal = (props) => {
             note: note,
             products: orderDetails
         });
-        console.log(response);
+        if(response.success){
+            resetData();
+            setSuccessMessage('Tạo đơn hàng thành công!');
+        }else{
+            setErrorMessage(response.message);
+        }
+    }
 
+    const resetData = ()=>{
         setSavingOrder(false);
         setOrderDetails([]);
         setTotal(0);
@@ -204,13 +221,19 @@ const AddOrderModal = (props) => {
         setShippingShow(false);
         setDiscountNote('');
         setShippingNote('');
-        alert('Success');
+        setSuccessMessage('');
+        setErrorMessage('');
+    }
+
+    const close = ()=>{
+        setOpening(false); 
+        props.onStateChange && props.onStateChange(false)
     }
 
     return (
         <CModal
             show={opening}
-            onClose={setOpening}
+            onClose={close}
             addContentClass="order-modal"
             closeOnBackdrop={false}
             {...props}
@@ -223,6 +246,12 @@ const AddOrderModal = (props) => {
                     <CTabContent>
                         <CTabPane>
                             <div className="order-detail-container">
+                                <CAlert
+                                    color="warning"
+                                    show={successMessage != ''}
+                                    closeButton
+                                    onShowChange={(value)=> !true && setSuccessMessage('')}
+                                >{successMessage}</CAlert>
                                 <div className="add-product-container">
                                     <div className="add-product-input">
                                         <AsyncTypeahead
@@ -257,7 +286,7 @@ const AddOrderModal = (props) => {
                                             }}
                                         />
                                         {!isLoadingProduct ? <CIcon content={cilSearch} /> : null}
-                                        <CButton className="btn-primary btn-add" onClick={addOrderProduct} disabled={!selectedProduct.length}>Thêm</CButton>
+                                        <CButton className="btn-primary btn-add" onClick={()=>addOrderProduct()} disabled={!selectedProduct.length}>Thêm</CButton>
                                     </div>
                                 </div>
                                 <CustomScroll heightRelativeToParent="auto">
@@ -413,7 +442,7 @@ const AddOrderModal = (props) => {
                     <CModalFooter>
                         <CButton 
                         color="secondary" 
-                        onClick={() => setOpening(false)}
+                        onClick={close}
                         >Hủy</CButton>
                         <CButton color="primary" disabled={savingOrder || total <= 0} onClick={()=>createOrder()}>{savingOrder ? 'Đang tạo...' : 'Tạo đơn hàng'} </CButton>
                     </CModalFooter>

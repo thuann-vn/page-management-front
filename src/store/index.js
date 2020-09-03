@@ -11,6 +11,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import messagesReducer from './reducers/messagesReducer';
 import customersReducer from './reducers/customersReducer';
 import tagsReducer from './reducers/tagsReducer';
+import ordersReducer from './reducers/ordersReducer';
 
 
 // Combine reducers
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     threads: threadsReducer,
     messages: messagesReducer,
     customers: customersReducer,
-    tags: tagsReducer
+    tags: tagsReducer,
+    orders: ordersReducer
 })
 
 const persistConfig = {

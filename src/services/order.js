@@ -7,6 +7,9 @@ export const OrderService  = {
     getOrders: ()=>{
         return api.call(`/api/orders`);
     },
+    getCustomerOrders: (customerId)=>{
+        return api.call(`/api/orders?customer_id=${customerId}`);
+    },
     updateOrder: (tag) => {
         return api.call(`/api/orders/${tag._id}`, tag, 'PUT')
     },
