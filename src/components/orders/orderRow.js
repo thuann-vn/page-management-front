@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import MoneyFormat from '../MoneyFormat';
+import ReactTimeAgo from 'react-time-ago/commonjs/ReactTimeAgo';
 
 const OrderRow = (props) => {
     const { data } = props;
@@ -12,6 +13,7 @@ const OrderRow = (props) => {
                 </span>
             </div>
             <div className="order-price">
+                <ReactTimeAgo date={data.createdAt}/> <br/>
                 <MoneyFormat value={data.total}/>
             </div>
         </div>

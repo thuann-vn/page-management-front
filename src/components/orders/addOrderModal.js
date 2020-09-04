@@ -15,6 +15,7 @@ import Config from '../../constants/Config';
 import NumberFormat from 'react-number-format';
 import MoneyFormat from '../MoneyFormat';
 import { OrderService } from '../../services/order';
+import MyAlert from '../Alert';
 
 const AddOrderModal = (props) => {
     const { id, customerId } = props;
@@ -53,6 +54,10 @@ const AddOrderModal = (props) => {
 
     //Track ID
     useEffect(() => {
+            
+        MyAlert.fire({
+            title: 'Tạo đơn hàng thành công'
+        })
         if (id) {
             dispatch(getCustomerFromApi(id));
             dispatch(getCustomerTags(id));
@@ -204,8 +209,12 @@ const AddOrderModal = (props) => {
             products: orderDetails
         });
         if(response.success){
+            dispatch()
             resetData();
-            setSuccessMessage('Tạo đơn hàng thành công!');
+            close();
+            MyAlert.fire({
+                title: 'Tạo đơn hàng thành công'
+            })
         }else{
             setErrorMessage(response.message);
         }
