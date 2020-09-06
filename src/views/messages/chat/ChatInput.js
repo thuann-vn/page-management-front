@@ -5,10 +5,16 @@ import { faLaughBeam } from '@fortawesome/free-solid-svg-icons'
 import { FacebookService } from '../../../services/facebook'
 import { sendMessageToApi, sendMessage } from '../../../store/actions/messagesActions'
 import InputEmoji from "react-input-emoji";
+import CIcon from '@coreui/icons-react'
+import { cilInbox } from '@coreui/icons'
+import AddOrderModal from '../../../components/orders/addOrderModal'
 const ChatInput = (props) => {
     const {thread} = props;
-    const [value, setValue] = React.useState('');
     const dispatch = useDispatch();
+    const [value, setValue] = React.useState('');
+
+    //Orders
+    const [orderModalShow, setOrderModalShow] = useState(false);
     
     const onEnter =(text)=>{
         if(!text){
@@ -25,9 +31,10 @@ const ChatInput = (props) => {
                     onChange={(text) => {setValue(text)}}
                     cleanOnEnter
                     onEnter={onEnter}
-                    placeholder="Type a message"
+                    placeholder="Nhập tin nhắn..."
                     keepOpenend={true}
                 />
+                <CIcon className="btn-add-order" content={cilInbox} size={48} onClick={()=> setOrderModalShow(true)}/>
         </div>
     )
 }

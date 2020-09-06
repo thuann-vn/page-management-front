@@ -4,10 +4,13 @@ import { FacebookService } from "../../services/facebook";
 export const FETCH_THREADS = 'FETCH_THREADS'
 export const THREAD_CHANGED = 'THREAD_CHANGED'
 
-export const fetchThreads = (threads) => {
+export const fetchThreads = (pageId, threads) => {
     return {
         type: FETCH_THREADS,
-        payload: threads
+        payload: {
+            pageId,
+            data: threads
+        }
     }
 };
 
@@ -17,16 +20,19 @@ export const getThreadFromApi = (pageId) => {
             .then(
                 result => { 
                     if(result && result.length){
-                        dispatch(fetchThreads(result));
+                        dispatch(fetchThreads(pageId, result));
                     }
                 }
             );
     };
 }
 
-export const threadChanged = (thread) => {
+export const threadChanged = (pageId, data) => {
     return {
         type: THREAD_CHANGED,
-        payload: thread
+        payload: {
+            pageId,
+            data
+        }
     }
 };

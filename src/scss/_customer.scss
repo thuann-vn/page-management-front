@@ -108,6 +108,38 @@
         margin-top: 10px;
     }
 
+    .add-note-form{
+        .add-note-buttons{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+
+    .customer-notes-container{
+        padding: 0px 15px;
+
+        .customer-notes-description{
+            border-top: 1px solid #efefef;
+            margin-top: 10px;
+            padding-top: 5px;
+            font-size: 12px;
+            color: #777;
+        }
+    }
+
+    .customer-notes{
+        time{
+            display: block;
+            color: #ccc;
+            font-size: 12px;
+        }
+
+        > span{
+            white-space: pre-wrap;
+        }
+    }
+
     .tags-modal{
         .add-tag-container{
             position: relative;

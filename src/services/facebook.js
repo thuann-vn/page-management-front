@@ -8,9 +8,7 @@ export const FacebookService  = {
         return api.call('/api/facebook/page-setup', page, 'POST');
     },
     threads: (pageId) => {
-        return api.call('/api/facebook/threads', {
-            pageId
-        });
+        return api.call(`/api/facebook/threads?page_id=${pageId}`);
     },
     messages: (threadId, page = 1) => {
         return api.call(`/api/facebook/messages?threadId=${threadId}&page=${page}`);

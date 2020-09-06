@@ -12,10 +12,16 @@ const messagesReducer = (state = initialState, action) => {
                 if(page == 1){
                     state[threadId] = [...messages] 
                 }else{
-                    state[threadId] = [
-                        ...messages,
-                        ...state[threadId]
-                    ]
+                    if(state[threadId]){
+                        state[threadId] = [
+                            ...messages,
+                            ...state[threadId]
+                        ]
+                    }else{
+                        state[threadId] = [
+                            ...messages
+                        ]
+                    }
                 }
             }  
             return state;

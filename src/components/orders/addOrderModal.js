@@ -54,10 +54,6 @@ const AddOrderModal = (props) => {
 
     //Track ID
     useEffect(() => {
-            
-        MyAlert.fire({
-            title: 'Tạo đơn hàng thành công'
-        })
         if (id) {
             dispatch(getCustomerFromApi(id));
             dispatch(getCustomerTags(id));
@@ -473,3 +469,16 @@ const AddOrderModal = (props) => {
 }
 
 export default AddOrderModal
+
+export function useOrderModal(WrappedComponent) {
+    const openModal = ()=>{
+
+    }
+  
+    return (
+        <>
+            <AddOrderModal></AddOrderModal>
+            <WrappedComponent/>
+        </>
+    )
+}

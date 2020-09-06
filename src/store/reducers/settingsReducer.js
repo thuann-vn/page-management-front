@@ -1,9 +1,10 @@
-import { LOGIN, LOGOUT, UPDATE_PROFILE, GET_SETUP_STATUS } from '../actions/settingsActions'
+import { LOGIN, LOGOUT, UPDATE_PROFILE, GET_SETUP_STATUS, SET_CURRENT_PAGE } from '../actions/settingsActions'
 
 const initialState = {
    token: null,
    userInfo: null,
    setupStatus: null,
+   currentPage: null
 }
 
 const settingsReducer = (state = initialState, action) => {
@@ -30,6 +31,11 @@ const settingsReducer = (state = initialState, action) => {
                 ...state,
                 userInfo: action.payload.user,
                 setupStatus: action.payload
+            };
+        case SET_CURRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.payload,
             };
         default:
             return state;

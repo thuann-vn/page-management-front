@@ -14,6 +14,7 @@ import {store, persistor} from './store/index'
 import JavascriptTimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import vi from 'javascript-time-ago/locale/vi';
+import OrderModalContext from './contexts/orderModalContext';
 JavascriptTimeAgo.addLocale(en);
 JavascriptTimeAgo.addLocale(vi);
 

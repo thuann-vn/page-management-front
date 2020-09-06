@@ -4,7 +4,7 @@ import ReactTimeAgo from 'react-time-ago';
 import { getCustomerFromApi, updateCustomerTags, getCustomerTags, updateCustomer } from '../../store/actions/customersActions';
 import CIcon from '@coreui/icons-react';
 import { cilBarcode, cilEnvelopeClosed, cilClock, cilInfo, cilPhone, cilAddressBook, cilDelete, cilTrash } from '@coreui/icons';
-import { CButton, CCollapse, CCardBody, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CPopover, CLink, CDropdown, CDropdownToggle, CDropdownMenu, CCard, CCardHeader, CListGroup, CListGroupItem, CBadge, CButtonGroup } from '@coreui/react';
+import { CButton, CCollapse, CCardBody, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CPopover, CLink, CDropdown, CDropdownToggle, CDropdownMenu, CCard, CCardHeader, CListGroup, CListGroupItem, CBadge, CButtonGroup, CFormGroup, CTextarea } from '@coreui/react';
 import { Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { fetchTags } from '../../store/actions/tagsActions';
 import { CirclePicker, TwitterPicker } from 'react-color';
@@ -21,6 +21,7 @@ const CustomerPanel = (props) => {
     const tags = useSelector(state => state.tags || []);
     const orders = useSelector(state => state.orders[id] || []);
     const [tagInputCollapse, setTagInputCollapse] = useState(false);
+    const [noteInputCollapse, setNoteInputCollapse] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedTags, setSelectedTags] = useState([]);
     const [editingTags, setEditingTags] = useState(false);
@@ -33,7 +34,12 @@ const CustomerPanel = (props) => {
     //Orders
     const [orderModalShow, setOrderModalShow] = useState(false);
 
-    console.log('ORDERS', orders);
+    //Notes
+    const [notes, setNotes] = useState(customer.notes);
+
+    //Saving notes
+    const [savingNotes, setSavingNotes] = useState(false);
+
     const dispatch = useDispatch();
     const tagInputRef = useRef();
 
@@ -143,6 +149,11 @@ const CustomerPanel = (props) => {
                 setNewTagColor(DefaultTagColor);
             }
         })
+    }
+
+    const saveNotes = async () =>{
+        dispatch(updateCustomer(id, { notes }));
+        setNoteInputCollapse(false);
     }
 
     return (
@@ -274,11 +285,10 @@ const CustomerPanel = (props) => {
                     </CustomScroll>
                 </CModalBody>
             </CModal>
-
+            <hr/>
             <div className="customer-orders">
                 <div className="customer-panel">
-                    <label className="">Đơn hàng</label>
-                    <CButton className="active btn btn-behance btn-pill btn-sm" onClick={() => setOrderModalShow(true)}>+ Tạo đơn hàng</CButton>
+                    <label className="">Hoạt động</label>
                 </div>
                 <div className="order-list">
                     {
@@ -290,7 +300,38 @@ const CustomerPanel = (props) => {
                     }
                 </div>
             </div>
-            <AddOrderModal opening={orderModalShow} onStateChange={(state)=>{setOrderModalShow(state)}} customerId={customer.id} />
+            <hr/>
+            
+            <div className="customer-notes">
+                <div className="customer-panel">
+                    <label className="">Ghi chú</label>
+                    <CButton className="btn btn-link btn-block btn-pill active" onClick={() => setNoteInputCollapse(true)} disabled={noteInputCollapse}>{customer.notes ? 'Sửa ghi chú' : 'Thêm ghi chú'}</CButton>
+                </div>
+                <div className="customer-notes-container">
+                    <div className="customer-notes" hidden={noteInputCollapse}>
+                        {customer.notes_updated_time ? <ReactTimeAgo date={customer.notes_updated_time}/> : ''}
+                        <span>{customer.notes ? customer.notes : ''}</span>
+                    </div>
+                    <CCollapse show={noteInputCollapse}>
+                        <div className="add-note-form">
+                            <CFormGroup>
+                                <CTextarea placeholder="Viết ghi chú..." multiple={true} rows={2} value={notes} onChange={(e) => setNotes(e.target.value)}></CTextarea>
+                            </CFormGroup>
+                            <div className="add-note-buttons">
+                                <CButton 
+                                color="secondary" 
+                                onClick={() => {setNoteInputCollapse(false); setNotes(customer.notes);}}
+                                >Hủy</CButton>
+                                <CButton color="primary" disabled={savingNotes} onClick={()=>saveNotes()}>{savingNotes ? 'Đang lưu...' : 'Lưu'} </CButton>
+                            </div>
+
+                            <div className="customer-notes-description">
+                                Với ghi chú, bạn có thể ghi nhớ những chi tiết quan trọng về mọi người. Chỉ những người quản lý Trang của bạn mới nhìn thấy ghi chú.
+                            </div>
+                        </div>
+                    </CCollapse>
+                </div>
+            </div>
         </div>
     )
 }

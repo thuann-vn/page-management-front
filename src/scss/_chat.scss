@@ -95,17 +95,41 @@ $primaryColor: #3399ff;
 	}
 }
 
+.contacts-header{
+	position: relative;
+	padding: 10px;
+	border-bottom: 1px solid #efefef;
+	background-color: #fff;
+
+	input{
+		background-color: #f5f6f7;
+		border-radius: 20px;
+		font-family: Helvetica Neue, Segoe UI, Helvetica, Arial, sans-serif;
+		font-size: 12px;
+		height: 41px;
+		line-height: 30px;
+		padding-left: 35px;
+		padding-right: 0;
+		border: none;
+	}
+
+	.search-icon{
+		position: absolute;
+		left: 20px;
+		top: 20px;
+	}
+
+	.clear-icon{
+		position: absolute;
+		right: 20px;
+		top: 20px;
+		cursor: pointer;
+	}
+}
+
 .contacts {
-	width: 20rem;
 	box-sizing: border-box;
 	cursor: pointer;
-	
-	background: white;
-	box-shadow: 
-		0 0 8rem 0 rgba(black, 0.1),
-		2rem 2rem 4rem -3rem rgba(black, 0.5);
-	
-	transition: transform 500ms;
     overflow: auto;
 	
 	h2 {
@@ -126,6 +150,32 @@ $primaryColor: #3399ff;
 	
 	.contact:last-child {
 		margin: 0;
+	}
+
+	.contact{
+		margin-bottom: 0;
+		padding-right: 10px;
+	}
+}
+
+.contacts-container{
+    flex: 1;
+	display: flex;
+	flex-direction: column;
+    max-height: 100%;
+	width: 20rem;
+	min-width: 20rem;
+	max-width: 20rem;
+	
+	.contact-list{
+		flex: 1
+	}
+
+	.rcs-custom-scroll{
+		background: white;
+		box-shadow: 
+			0 0 8rem 0 rgba(black, 0.1),
+			2rem 2rem 4rem -3rem rgba(black, 0.5);
 	}
 }
 
@@ -233,6 +283,12 @@ $primaryColor: #3399ff;
 
 			&.attachments{
 				display: flex;
+				flex-direction: column;
+
+				> span{
+					display: block;
+					margin-bottom: 10px;
+				}
 			}
 
 			&.sending{
@@ -259,6 +315,11 @@ $primaryColor: #3399ff;
 				position: absolute;
 				white-space: nowrap;
 				color: $text-3;
+			}
+
+			.attachment{
+				border-radius: 4px;
+				overflow: hidden;
 			}
 
 			.multi-attachments{

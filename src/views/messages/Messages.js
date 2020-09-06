@@ -14,29 +14,36 @@ const pusher = new Pusher(Config.pusherAppKey, {
 });
 
 const Messages = () => {
-    const threads = useSelector(state => state.threads || []);
+    const pages = useSelector(state => state.pages || []);
+    var defaultPage = pages.length ? pages[0] : null;
+    const currentPage = useSelector(state => state.settings.currentPage || defaultPage)
+    const allThreads = useSelector(state => state.threads || {})
+    
+    const [threads, setThreads] = useState(allThreads[currentPage.id] || []);
     const dispatch = useDispatch();
     const [activeThread, setActiveThread] = useState(threads.length? threads[0] : {});
+    
     React.useEffect(()=>{
-        dispatch(getThreadFromApi());
-    }, []);
+        var newThreads = [...allThreads[currentPage.id]];
+        setThreads(newThreads);
+        setActiveThread(newThreads.length ? newThreads[0] : null);
+        dispatch(getThreadFromApi(currentPage.id));
+    }, [currentPage]);
 
     React.useEffect(()=>{
         const channel = pusher.subscribe('notifications');
         channel.bind('message.new', data => {
             dispatch(receiveMessage(data.thread.id, data.message));
-            dispatch(threadChanged(data.thread));
+            dispatch(threadChanged(currentPage.id,data.thread));
         });
     }, []);
 
     return (
-        <>
-            <div class="chat-container">
-                <ThreadList threads={threads} activeItem={activeThread} onItemClick={(item)=>{ setActiveThread(item)}}></ThreadList>
-                <ChatList thread={activeThread}/>
-                <CustomerPanel id={activeThread.id}/>
-            </div>
-        </>
+        <div class="chat-container">
+            <ThreadList threads={threads} activeItem={activeThread} onItemClick={(item)=>{ setActiveThread(item)}}></ThreadList>
+            <ChatList thread={activeThread}/>
+            <CustomerPanel id={activeThread.id}/>
+        </div>
     )
 }
 
