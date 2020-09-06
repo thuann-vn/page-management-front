@@ -8,6 +8,7 @@ import { receiveMessage } from '../../store/actions/messagesActions';
 import Pusher from 'pusher-js';
 import Config from '../../constants/Config';
 import CustomerPanel from '../../components/customerPanel/customerPanel';
+import AddOrderModal from '../../components/orders/addOrderModal';
 const pusher = new Pusher(Config.pusherAppKey, {
     cluster: Config.pusherCluster,
     encrypted: true
@@ -43,6 +44,7 @@ const Messages = () => {
             <ThreadList threads={threads} activeItem={activeThread} onItemClick={(item)=>{ setActiveThread(item)}}></ThreadList>
             <ChatList thread={activeThread}/>
             <CustomerPanel id={activeThread.id}/>
+            <AddOrderModal customerId={activeThread.id}></AddOrderModal>
         </div>
     )
 }

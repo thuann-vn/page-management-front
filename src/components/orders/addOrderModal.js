@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getCustomerFromApi, getCustomerTags } from '../../store/actions/customersActions';
 import CIcon from '@coreui/icons-react';
@@ -16,10 +16,12 @@ import NumberFormat from 'react-number-format';
 import MoneyFormat from '../MoneyFormat';
 import { OrderService } from '../../services/order';
 import MyAlert from '../Alert';
+import OrderModalContext from '../../contexts/orderModalContext';
 
 const AddOrderModal = (props) => {
+    const contextState = useContext(OrderModalContext);
     const { id, customerId } = props;
-    const [opening, setOpening] = useState(false);
+    const [opening, setOpening] = useState(contextState.opening);
     const [activeTab, setActiveTab] = useState(0);
     const [searchingProducts, setSearchingProducts] = useState([]);
     
@@ -52,6 +54,12 @@ const AddOrderModal = (props) => {
     const [addingProduct, setAddingProduct] = useState(false);
     const dispatch = useDispatch();
 
+    //Track Context
+    useEffect(() => {
+        setOpening(contextState.opening);
+        resetData();
+    }, [contextState.opening]);
+
     //Track ID
     useEffect(() => {
         if (id) {
@@ -59,13 +67,6 @@ const AddOrderModal = (props) => {
             dispatch(getCustomerTags(id));
         }
     }, [id]);
-
-    useEffect(() => {
-        if(props.opening != opening){
-            setOpening(props.opening);
-            resetData();
-        }
-    }, [props.opening]);
 
     const searchProduct = (query) => {
         setIsLoadingProduct(true);
@@ -232,7 +233,7 @@ const AddOrderModal = (props) => {
 
     const close = ()=>{
         setOpening(false); 
-        props.onStateChange && props.onStateChange(false)
+        contextState.open(false);
     }
 
     return (
@@ -467,18 +468,5 @@ const AddOrderModal = (props) => {
         </CModal>
     )
 }
-
+AddOrderModal.contextType = OrderModalContext;
 export default AddOrderModal
-
-export function useOrderModal(WrappedComponent) {
-    const openModal = ()=>{
-
-    }
-  
-    return (
-        <>
-            <AddOrderModal></AddOrderModal>
-            <WrappedComponent/>
-        </>
-    )
-}

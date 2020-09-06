@@ -8,6 +8,7 @@ import InputEmoji from "react-input-emoji";
 import CIcon from '@coreui/icons-react'
 import { cilInbox } from '@coreui/icons'
 import AddOrderModal from '../../../components/orders/addOrderModal'
+import OrderModalContext from '../../../contexts/orderModalContext'
 const ChatInput = (props) => {
     const {thread} = props;
     const dispatch = useDispatch();
@@ -34,7 +35,12 @@ const ChatInput = (props) => {
                     placeholder="Nhập tin nhắn..."
                     keepOpenend={true}
                 />
-                <CIcon className="btn-add-order" content={cilInbox} size={48} onClick={()=> setOrderModalShow(true)}/>
+                <OrderModalContext.Consumer>
+                    {({opening, open}) => (
+                        <CIcon className="btn-add-order" content={cilInbox} size={48} onClick={()=> open(true)}/>
+                    )}
+                </OrderModalContext.Consumer>
+                
         </div>
     )
 }

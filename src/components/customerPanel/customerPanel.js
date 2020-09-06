@@ -309,7 +309,7 @@ const CustomerPanel = (props) => {
                 </div>
                 <div className="customer-notes-container">
                     <div className="customer-notes" hidden={noteInputCollapse}>
-                        {customer.notes_updated_time ? <ReactTimeAgo date={customer.notes_updated_time}/> : ''}
+                        {customer.notes_updated_time ? <ReactTimeAgo date={customer.notes_updated_time} locale="vi"/> : ''}
                         <span>{customer.notes ? customer.notes : ''}</span>
                     </div>
                     <CCollapse show={noteInputCollapse}>

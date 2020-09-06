@@ -390,6 +390,15 @@ $primaryColor: #3399ff;
 				color: $text-3;
 			}
 		}
+
+		.c-icon.btn-add-order{
+			height: 24px;
+			width: 24px;
+			color: #777;
+			cursor: pointer;
+			margin-left: 10px;
+			margin-right: 5px;
+		}
 	}
 }
 
