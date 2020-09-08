@@ -13,4 +13,7 @@ export const CustomerService  = {
     addTags: (id, tags)=>{
         return api.call(`/api/customer/${id}/tags`, {tags}, 'POST');
     },
+    getActivities: (id)=>{
+        return api.call(`/api/customer/${id}/activities`);
+    },
 }

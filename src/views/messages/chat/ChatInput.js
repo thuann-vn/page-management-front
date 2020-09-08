@@ -37,7 +37,7 @@ const ChatInput = (props) => {
                 />
                 <OrderModalContext.Consumer>
                     {({opening, open}) => (
-                        <CIcon className="btn-add-order" content={cilInbox} size={48} onClick={()=> open(true)}/>
+                        <CIcon title="Tạo đơn hàng" className="btn-add-order" content={cilInbox} size={48} onClick={()=> open(true)}/>
                     )}
                 </OrderModalContext.Consumer>
                 

@@ -15,6 +15,8 @@ import AddOrderModal from '../orders/addOrderModal';
 import { fetchCustomerOrders } from '../../store/actions/ordersActions';
 import MoneyFormat from '../MoneyFormat';
 import OrderRow from '../orders/orderRow';
+import { CustomerService } from '../../services/customer';
+import commonUtils from '../../utils/commonUtils';
 const CustomerPanel = (props) => {
     const { id } = props;
     const customer = useSelector(state => state.customers[id] || { tags: [] });
@@ -25,14 +27,12 @@ const CustomerPanel = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedTags, setSelectedTags] = useState([]);
     const [editingTags, setEditingTags] = useState(false);
+    const [activities, setActivities] = useState([]);
 
     //New tag input
     const [newTagName, setNewTagName] = useState('');
     const [newTagColor, setNewTagColor] = useState(DefaultTagColor);
     const [tagList, setTagList] = useState([]);
-
-    //Orders
-    const [orderModalShow, setOrderModalShow] = useState(false);
 
     //Notes
     const [notes, setNotes] = useState(customer.notes);
@@ -43,11 +43,17 @@ const CustomerPanel = (props) => {
     const dispatch = useDispatch();
     const tagInputRef = useRef();
 
+    const loadActivities = async ()=>{
+        const result = await CustomerService.getActivities(id);
+        if(result.success){
+            setActivities(result.data);
+        }
+    }
     useEffect(() => {
         if (id) {
             dispatch(getCustomerFromApi(id));
             dispatch(getCustomerTags(id));
-            dispatch(fetchCustomerOrders(id));
+            loadActivities();
         }
     }, [id]);
 
@@ -286,15 +292,18 @@ const CustomerPanel = (props) => {
                 </CModalBody>
             </CModal>
             <hr/>
-            <div className="customer-orders">
+            <div className="customer-activities">
                 <div className="customer-panel">
                     <label className="">Hoạt động</label>
                 </div>
-                <div className="order-list">
+                <div className="activities-list">
                     {
-                        orders.map((order)=>{
+                        activities.map((activity)=>{
                             return (
-                                <OrderRow data={order} key={"order_" + order.id}/>
+                                <div className="activity-row">
+                                    <ReactTimeAgo date={activity.createdAt} locale="vi"/>
+                                    <p key={'activity_'+ activity.id}>{commonUtils.getActivityStr(activity)}</p>
+                                </div>
                             )
                         })
                     }

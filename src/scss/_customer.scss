@@ -104,6 +104,23 @@
         }
     }
 
+    .activities-list{
+        padding: 0 15px;
+        .activity-row{
+            margin-top: 10px;
+            time{
+                display: block;
+                color: #ccc;
+                font-size: 12px;
+            }
+
+            p{
+                margin-bottom: 0;
+            }
+        }
+    }
+
+
     .add-tag-form{
         margin-top: 10px;
     }

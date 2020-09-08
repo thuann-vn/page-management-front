@@ -31,14 +31,6 @@ const Messages = () => {
         dispatch(getThreadFromApi(currentPage.id));
     }, [currentPage]);
 
-    React.useEffect(()=>{
-        const channel = pusher.subscribe('notifications');
-        channel.bind('message.new', data => {
-            dispatch(receiveMessage(data.thread.id, data.message));
-            dispatch(threadChanged(currentPage.id,data.thread));
-        });
-    }, []);
-
     return (
         <div class="chat-container">
             <ThreadList threads={threads} activeItem={activeThread} onItemClick={(item)=>{ setActiveThread(item)}}></ThreadList>

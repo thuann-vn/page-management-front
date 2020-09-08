@@ -27,10 +27,12 @@ const messagesReducer = (state = initialState, action) => {
             return state;
         case RECEIVE_MESSAGE:
             var message = action.payload.message;
-            var threadId = action.payload.threadId;
-            var index = state[threadId].findIndex(item => item.id == message.id);
-            if(index == -1){
-                state[threadId] = [...state[threadId], message];
+            if(message){
+                var threadId = action.payload.threadId;
+                var index = state[threadId].findIndex(item => item.id == message.id);
+                if(index == -1){
+                    state[threadId] = [...state[threadId], message];
+                }
             }
             return state;
         case SEND_MESSAGE:

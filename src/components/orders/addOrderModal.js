@@ -206,7 +206,6 @@ const AddOrderModal = (props) => {
             products: orderDetails
         });
         if(response.success){
-            dispatch()
             resetData();
             close();
             MyAlert.fire({
