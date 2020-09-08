@@ -1,4 +1,4 @@
-import { FETCH_CUSTOMER, GET_CUSTOMER_TAGS, UPDATE_CUSTOMER } from '../actions/customersActions'
+import { FETCH_CUSTOMER, GET_CUSTOMER_TAGS, UPDATE_CUSTOMER, GET_CUSTOMER_ACTIVITIES } from '../actions/customersActions'
 
 const initialState = {}
 
@@ -6,6 +6,14 @@ const customersReducer = (state = initialState, action) => {
     const { payload } = action;
     switch (action.type) {
         case FETCH_CUSTOMER:
+            if(state[payload.id]){
+                state[payload.id] = {
+                    ...state[payload.id],
+                    ...payload
+                }
+            }else{
+                state[payload.id] = payload
+            }
             state[payload.id] = payload;
             return state;
         case UPDATE_CUSTOMER:
@@ -21,7 +29,13 @@ const customersReducer = (state = initialState, action) => {
                 tags
             };
             return state;
-            break;
+        case GET_CUSTOMER_ACTIVITIES:
+            const { activities } = payload;
+            state[payload.id] = {
+                ...state[payload.id],
+                activities
+            };
+            return state;
         default:
             return state;
     }

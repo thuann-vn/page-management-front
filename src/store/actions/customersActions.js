@@ -6,6 +6,7 @@ export const FETCH_CUSTOMER = 'FETCH_CUSTOMER'
 export const GET_CUSTOMER_TAGS = 'GET_CUSTOMER_TAGS'
 export const ADD_CUSTOMER_TAGS = 'ADD_CUSTOMER_TAGS'
 export const UPDATE_CUSTOMER = 'UPDATE_CUSTOMER'
+export const GET_CUSTOMER_ACTIVITIES = 'GET_CUSTOMER_ACTIVITIES'
 
 export const fetchCustomer = (customer) => {
     return {
@@ -70,6 +71,26 @@ export const updateCustomer = (customerId, data) => {
                             payload: {
                                 id: customerId,
                                 data: data
+                            }
+                        });
+                    }
+                }
+            );
+    };
+}
+
+
+export const getCustomerActivities = (customerId)=>{
+    return dispatch => {
+        CustomerService.getActivities(customerId)
+            .then(
+                result => { 
+                    if(result.success){
+                        dispatch({
+                            type: GET_CUSTOMER_ACTIVITIES,
+                            payload: {
+                                id: customerId,
+                                activities: result.data
                             }
                         });
                     }

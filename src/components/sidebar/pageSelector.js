@@ -7,6 +7,7 @@ import { receiveMessage } from '../../store/actions/messagesActions';
 import { threadChanged } from '../../store/actions/threadsActions';
 import PusherService from '../../services/pusher';
 import JwtDecode from 'jwt-decode';
+import { getCustomerActivities } from '../../store/actions/customersActions';
 
 const PageSelector = () => {
     const dropdownRef = useRef();
@@ -38,6 +39,13 @@ const PageSelector = () => {
         channel.bind('thread.add', data => {
             console.log('Thread Add', data);
             dispatch(threadChanged(data.customer_id, data.message));
+        });
+
+        
+
+        channel.bind('order.new', data => {
+            console.log('Order New', data);
+            dispatch(getCustomerActivities(data.order.customer_id));
         });
     }, []);
 

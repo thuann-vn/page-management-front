@@ -11,13 +11,13 @@ import { CirclePicker, TwitterPicker } from 'react-color';
 import { TagColors, DefaultTagColor } from '../../constants/Colors';
 import { TagService } from '../../services/tag';
 import CustomScroll from 'react-custom-scroll';
-import AddOrderModal from '../orders/addOrderModal';
+import AddOrderModal from './addOrderModal';
 import { fetchCustomerOrders } from '../../store/actions/ordersActions';
 import MoneyFormat from '../MoneyFormat';
-import OrderRow from '../orders/orderRow';
+import OrderRow from './orderRow';
 import { CustomerService } from '../../services/customer';
 import commonUtils from '../../utils/commonUtils';
-const CustomerPanel = (props) => {
+const OrderPanel = (props) => {
     const { id } = props;
     const customer = useSelector(state => state.customers[id] || { tags: [] });
     const tags = useSelector(state => state.tags || []);
@@ -344,4 +344,4 @@ const CustomerPanel = (props) => {
     )
 }
 
-export default CustomerPanel
+export default OrderPanel
