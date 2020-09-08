@@ -1,24 +1,25 @@
 import { OrderService } from "../../services/order";
 
 //Action names
-export const FETCH_ORDERS = 'FETCH_ORDERS'
+export const FETCH_CUSTOMER_ORDERS = 'FETCH_CUSTOMER_ORDERS'
 export const ADD_ORDER = 'ADD_ORDER'
 
-export const fetchOrders = (pageId) => {
+export const fetchCustomerOrders = (customerId) => {
     return dispatch => {
-        OrderService.getOrders(pageId)
+        OrderService.getOrders()
             .then(
                 result => { 
                     if(result){
                         dispatch({
-                            type: FETCH_ORDERS,
-                            payload: {pageId, data: result}
+                            type: FETCH_CUSTOMER_ORDERS,
+                            payload: {customerId: customerId, data: result}
                         });
                     }
                 }
             );
     };
 }
+
 
 export const addOrderSuccess = (customerId, data) => {
     return {

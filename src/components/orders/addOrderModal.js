@@ -1,18 +1,14 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getCustomerFromApi, getCustomerTags } from '../../store/actions/customersActions';
 import CIcon from '@coreui/icons-react';
-import { cilTrash, cilKeyboard, cilPlus, cilSatelite, cilImage, cilSearch } from '@coreui/icons';
-import { CButton, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CDropdown, CDropdownToggle, CDropdownMenu, CListGroup, CListGroupItem, CTabs, CNav, CTabContent, CTabPane, CFormGroup, CLabel, CCol, CTextarea, CModalFooter, CInvalidFeedback, CAlert, CCollapse } from '@coreui/react';
-import { CirclePicker } from 'react-color';
-import { TagColors, DefaultTagColor } from '../../constants/Colors';
-import { TagService } from '../../services/tag';
+import { cilTrash, cilImage, cilSearch } from '@coreui/icons';
+import { CButton, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CListGroup, CListGroupItem, CTabs, CTabContent, CTabPane, CFormGroup, CLabel, CTextarea, CModalFooter, CInvalidFeedback, CAlert, CCollapse } from '@coreui/react';
 import CustomScroll from 'react-custom-scroll';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import CurrencyInput from 'react-currency-input-field';
 import { ProductService } from '../../services/product';
 import Config from '../../constants/Config';
-import NumberFormat from 'react-number-format';
 import MoneyFormat from '../MoneyFormat';
 import { OrderService } from '../../services/order';
 import MyAlert from '../Alert';
@@ -52,6 +48,7 @@ const AddOrderModal = (props) => {
     const [newProductImage, setNewImage] = useState(null);
     const [newProductErrorShow, setNewProductErrorShow] = useState(false);
     const [addingProduct, setAddingProduct] = useState(false);
+    const currentPage = useSelector(state => state.settings.currentPage || {})
     const dispatch = useDispatch();
 
     //Track Context
@@ -126,7 +123,7 @@ const AddOrderModal = (props) => {
                 setSuccessMessage('');
                 setErrorMessage('Tạo sản phẩm không thành công, vui lòng thử lại!');
             }
-        }).catch((e)=>{
+        }).catch(()=>{
             setSuccessMessage('');
             setErrorMessage('Tạo sản phẩm không thành công, vui lòng thử lại!');
         }).finally(()=>{
@@ -195,6 +192,7 @@ const AddOrderModal = (props) => {
     const createOrder = async ()=>{
         setSavingOrder(true);
         const response = await OrderService.createOrder({
+            page_id: currentPage.id,
             customer_id: customerId,
             subtotal: subtotal,
             discount: discount,
@@ -255,7 +253,7 @@ const AddOrderModal = (props) => {
                                     color="warning"
                                     show={successMessage != ''}
                                     closeButton
-                                    onShowChange={(value)=> !true && setSuccessMessage('')}
+                                    onShowChange={()=> !true && setSuccessMessage('')}
                                 >{successMessage}</CAlert>
                                 <div className="add-product-container">
                                     <div className="add-product-input">
@@ -346,7 +344,7 @@ const AddOrderModal = (props) => {
                                                         decimalsLimit={0}
                                                         className={"form-control" + (newProductErrorShow && !newProductPrice > 0 ? ' is-invalid' : '') }
                                                         prefix={Config.currencySymbol + ' '}
-                                                        onChange={(value, name) => setDiscount(parseInt(value) || 0)}
+                                                        onChange={(value) => setDiscount(parseInt(value) || 0)}
                                                         value={discount}
                                                     />
                                                 </CFormGroup>
@@ -376,7 +374,7 @@ const AddOrderModal = (props) => {
                                                         decimalsLimit={0}
                                                         className={"form-control" + (newProductErrorShow && !newProductPrice > 0 ? ' is-invalid' : '') }
                                                         prefix={Config.currencySymbol + ' '}
-                                                        onChange={(value, name) => setShipping(parseInt(value) || 0)}
+                                                        onChange={(value) => setShipping(parseInt(value) || 0)}
                                                         value={shipping}
                                                     />
                                                 </CFormGroup>
@@ -427,7 +425,7 @@ const AddOrderModal = (props) => {
                                         decimalsLimit={0}
                                         className={"form-control" + (newProductErrorShow && !newProductPrice > 0 ? ' is-invalid' : '') }
                                         prefix={Config.currencySymbol + ' '}
-                                        onChange={(value, name) => setNewProductPrice(value)}
+                                        onChange={(value) => setNewProductPrice(value)}
                                         value={newProductPrice}
                                     />
                                     {newProductErrorShow && !newProductPrice > 0 && (<CInvalidFeedback>Vui lòng nhập giá sản phẩm</CInvalidFeedback>)}

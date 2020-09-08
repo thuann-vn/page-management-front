@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import ThreadItem from './ThreadItem'
 import CustomScroll from 'react-custom-scroll';
 import { CInput } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilSearch, cilX } from '@coreui/icons';
 import { search } from "ss-search"
+import OrderRow from '../../../components/orders/orderRow';
 
 const OrderList = (props) => {
-    const [threads, setThreads] = useState(props.threads || []);
+    const [orders, setOrders] = useState(props.orders || []);
     const [searchText, setSearchText] = useState('');
     
     React.useEffect(()=>{
-        setThreads([...props.threads]);
+        setOrders([...props.orders]);
         setSearchText('');
-    }, [props.threads]);
+    }, [props.orders]);
 
     const clickEvent = (item)=>{
         props.onItemClick(item);
@@ -21,8 +21,8 @@ const OrderList = (props) => {
 
     const searchThread = (q = '')=>{
         setSearchText(q);
-        const results = search(props.threads, ['name'], q);
-        setThreads(results);
+        const results = search(props.orders, ['name'], q);
+        setOrders(results);
     }
 
     return (
@@ -43,10 +43,10 @@ const OrderList = (props) => {
             </div>
             <CustomScroll heightRelativeToParent="100%">
                 <div className="contacts">
-                    {threads.map((item)=>{
+                    {orders.map((item)=>{
                         return (
                             <div key={item.id} onClick={()=>clickEvent(item)}>
-                                <ThreadItem active={item.id == props.activeItem.id} data={item}></ThreadItem>
+                                <OrderRow active={item.id == props.activeItem.id} data={item}/>
                             </div>
                         )
                     })}

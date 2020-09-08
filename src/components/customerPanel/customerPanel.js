@@ -1,21 +1,16 @@
-import React, { useState, useEffect, useRef, Fragment } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ReactTimeAgo from 'react-time-ago';
 import { getCustomerFromApi, updateCustomerTags, getCustomerTags, updateCustomer, getCustomerActivities } from '../../store/actions/customersActions';
 import CIcon from '@coreui/icons-react';
-import { cilBarcode, cilEnvelopeClosed, cilClock, cilInfo, cilPhone, cilAddressBook, cilDelete, cilTrash } from '@coreui/icons';
-import { CButton, CCollapse, CCardBody, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter, CPopover, CLink, CDropdown, CDropdownToggle, CDropdownMenu, CCard, CCardHeader, CListGroup, CListGroupItem, CBadge, CButtonGroup, CFormGroup, CTextarea } from '@coreui/react';
-import { Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { cilEnvelopeClosed, cilClock, cilInfo, cilPhone, cilAddressBook, cilTrash } from '@coreui/icons';
+import { CButton, CCollapse, CInput, CModal, CModalHeader, CModalTitle, CModalBody, CDropdown, CDropdownToggle, CDropdownMenu, CListGroup, CListGroupItem, CFormGroup, CTextarea } from '@coreui/react';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { fetchTags } from '../../store/actions/tagsActions';
-import { CirclePicker, TwitterPicker } from 'react-color';
+import { CirclePicker } from 'react-color';
 import { TagColors, DefaultTagColor } from '../../constants/Colors';
 import { TagService } from '../../services/tag';
 import CustomScroll from 'react-custom-scroll';
-import AddOrderModal from '../orders/addOrderModal';
-import { fetchCustomerOrders } from '../../store/actions/ordersActions';
-import MoneyFormat from '../MoneyFormat';
-import OrderRow from '../orders/orderRow';
-import { CustomerService } from '../../services/customer';
 import commonUtils from '../../utils/commonUtils';
 const CustomerPanel = (props) => {
     const { id } = props;
@@ -23,8 +18,8 @@ const CustomerPanel = (props) => {
     const tags = useSelector(state => state.tags || []);
     const [tagInputCollapse, setTagInputCollapse] = useState(false);
     const [noteInputCollapse, setNoteInputCollapse] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [selectedTags, setSelectedTags] = useState([]);
+    const [isLoading] = useState(false);
+    const [selectedTags] = useState([]);
     const [editingTags, setEditingTags] = useState(false);
 
     //New tag input
@@ -36,7 +31,7 @@ const CustomerPanel = (props) => {
     const [notes, setNotes] = useState(customer.notes);
 
     //Saving notes
-    const [savingNotes, setSavingNotes] = useState(false);
+    const [savingNotes] = useState(false);
 
     const dispatch = useDispatch();
     const tagInputRef = useRef();

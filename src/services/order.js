@@ -4,8 +4,8 @@ export const OrderService  = {
     createOrder: (data = {}) =>{
         return api.call(`/api/orders`, data, 'POST')
     },
-    getOrders: ()=>{
-        return api.call(`/api/orders`);
+    getOrders: (pageId)=>{
+        return api.call(`/api/orders?page_id=${pageId}`);
     },
     getCustomerOrders: (customerId)=>{
         return api.call(`/api/orders?customer_id=${customerId}`);

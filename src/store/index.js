@@ -12,6 +12,7 @@ import messagesReducer from './reducers/messagesReducer';
 import customersReducer from './reducers/customersReducer';
 import tagsReducer from './reducers/tagsReducer';
 import ordersReducer from './reducers/ordersReducer';
+import customerOrders from './reducers/customerOrdersReducer';
 import pagesReducer from './reducers/pagesReducer';
 
 
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
     customers: customersReducer,
     tags: tagsReducer,
     pages: pagesReducer,
+    customerOrders: customerOrders,
     orders: ordersReducer
 })
 
