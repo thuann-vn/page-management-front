@@ -85,6 +85,8 @@
         .btn{
             margin-right: 5px;
             margin-bottom: 5px;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
         .btn-remove{
@@ -223,7 +225,8 @@
         }
 
         .tags-list-container{
-            max-height: 500px;
+            max-height: 350px;
+            min-height: 200px;
         }
     }
 }

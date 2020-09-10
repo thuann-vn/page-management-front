@@ -35,7 +35,7 @@ const Orders = () => {
     return (
         <div class="chat-container">
             <OrderList orders={orders} activeItem={activeOrder} onItemClick={(item)=>{ setActiveOrder(item)}}/>
-            <OrderDetail order={activeOrder}/>
+            <OrderDetail order={activeOrder} page={currentPage}/>
             <OrderPanel id={activeOrder.customer_id}/>
             <AddOrderModal customerId={activeOrder.id}></AddOrderModal>
         </div>

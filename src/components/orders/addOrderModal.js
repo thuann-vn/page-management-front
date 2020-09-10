@@ -248,7 +248,7 @@ const AddOrderModal = (props) => {
                 <CTabs activeTab={activeTab}>
                     <CTabContent>
                         <CTabPane>
-                            <div className="order-detail-container">
+                            <div className="modal-order-detail-container">
                                 <CAlert
                                     color="warning"
                                     show={successMessage != ''}
