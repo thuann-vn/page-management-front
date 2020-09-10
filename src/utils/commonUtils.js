@@ -52,5 +52,30 @@ export default {
                 break;
         }
         return name;
-    }
+    },
+    getOrderPaymentStatusClass: (status) => {
+        var name = '';
+        switch (status) {
+            case 20:
+                name = `light`;
+                break;
+            default:
+                name = `warning`;
+                break;
+        }
+        return name;
+    },
+    getOrderPaymentStatusStr: (status) => {
+        var name = '';
+        switch (status) {
+            case 20:
+                name = `Đã thanh toán`;
+                break;
+            default:
+                name = `Chờ thanh toán`;
+                break;
+        }
+
+        return name;
+    },
 }

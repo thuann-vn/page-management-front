@@ -149,6 +149,7 @@ const CustomerPanel = (props) => {
         setNoteInputCollapse(false);
     }
 
+    console.log(customer.tags);
     return (
         <div className="customer-panel">
             <div className="customer-name">
@@ -215,19 +216,23 @@ const CustomerPanel = (props) => {
                         </div>
                     </CCollapse>
                 </div>
-                <div className="tags-list">
-                    {
-                        customer.tags.map((tag, index) => {
-                            return (
-                                <div key={'tag_' + (tag._id ? tag._id : (tag.id ? tag.id : index))} className="btn btn-pill btn-sm btn-secondary" style={{ opacity: tag.customOption ? 0.5 : 1 }}>
-                                    <span className="tag-color" style={{backgroundColor: tag.color || DefaultTagColor}}></span>
-                                    {tag.name}
-                                    <CButton className="btn-remove btn-link" onClick={() => { removeTag(tag) }}>x</CButton>
-                                </div>
-                            )
-                        })
-                    }
-                </div>
+                {
+                    customer.tags ? (
+                        <div className="tags-list">
+                            {
+                                customer.tags.map((tag, index) => {
+                                    return (
+                                        <div key={'tag_' + (tag._id ? tag._id : (tag.id ? tag.id : index))} className="btn btn-pill btn-sm btn-secondary" style={{ opacity: tag.customOption ? 0.5 : 1 }}>
+                                            <span className="tag-color" style={{backgroundColor: tag.color || DefaultTagColor}}></span>
+                                            {tag.name}
+                                            <CButton className="btn-remove btn-link" onClick={() => { removeTag(tag) }}>x</CButton>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    ) :null
+                }
             </div>
             <CModal
                 show={editingTags}

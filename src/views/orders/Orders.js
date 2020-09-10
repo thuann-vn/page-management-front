@@ -1,20 +1,13 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getThreadFromApi, threadChanged } from '../../store/actions/ordersActions';
 import OrderList from './orders/OrderList';
-import ChatList from './chat/ChatList';
-import { receiveMessage } from '../../store/actions/messagesActions';
 
 import Pusher from 'pusher-js';
 import Config from '../../constants/Config';
-import CustomerPanel from '../../components/customerPanel/customerPanel';
 import AddOrderModal from '../../components/orders/addOrderModal';
 import OrderPanel from '../../components/orders/orderPanel';
 import { fetchOrders } from '../../store/actions/ordersActions';
-const pusher = new Pusher(Config.pusherAppKey, {
-    cluster: Config.pusherCluster,
-    encrypted: true
-});
+import OrderDetail from './orders/OrderDetail';
 
 const Orders = () => {
     const pages = useSelector(state => state.pages || []);
@@ -42,7 +35,7 @@ const Orders = () => {
     return (
         <div class="chat-container">
             <OrderList orders={orders} activeItem={activeOrder} onItemClick={(item)=>{ setActiveOrder(item)}}/>
-            <ChatList thread={activeOrder}/>
+            <OrderDetail order={activeOrder}/>
             <OrderPanel id={activeOrder.customer_id}/>
             <AddOrderModal customerId={activeOrder.id}></AddOrderModal>
         </div>
