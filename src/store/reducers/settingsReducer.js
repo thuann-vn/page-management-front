@@ -1,10 +1,11 @@
-import { LOGIN, LOGOUT, UPDATE_PROFILE, GET_SETUP_STATUS, SET_CURRENT_PAGE } from '../actions/settingsActions'
+import { LOGIN, LOGOUT, UPDATE_PROFILE, GET_SETUP_STATUS, SET_CURRENT_PAGE, TOGGLE_SIDEBAR } from '../actions/settingsActions'
 
 const initialState = {
    token: null,
    userInfo: null,
    setupStatus: null,
-   currentPage: null
+   currentPage: null,
+   sidebar_show: true
 }
 
 const settingsReducer = (state = initialState, action) => {
@@ -36,6 +37,11 @@ const settingsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 currentPage: action.payload,
+            };
+        case TOGGLE_SIDEBAR:
+            return {
+                ...state,
+                sidebar_show: action.payload,
             };
         default:
             return state;

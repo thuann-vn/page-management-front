@@ -23,11 +23,6 @@ const CustomerPanel = (props) => {
     const [selectedTags] = useState([]);
     const [editingTags, setEditingTags] = useState(false);
 
-    //New tag input
-    const [newTagName, setNewTagName] = useState('');
-    const [newTagColor, setNewTagColor] = useState(DefaultTagColor);
-    const [tagList, setTagList] = useState([]);
-
     //Notes
     const [notes, setNotes] = useState(customer.notes);
 
@@ -41,7 +36,7 @@ const CustomerPanel = (props) => {
         if (id) {
             dispatch(getCustomerFromApi(id));
             dispatch(getCustomerTags(id));
-            dispatch(getCustomerActivities(id));
+            // dispatch(getCustomerActivities(id));
         }
     }, [id]);
 
@@ -92,8 +87,6 @@ const CustomerPanel = (props) => {
 
     const openTagManage = async () => {
         setEditingTags(true);
-        const result = await TagService.getTags();
-        setTagList(result);
     }
 
     const saveNotes = async () =>{

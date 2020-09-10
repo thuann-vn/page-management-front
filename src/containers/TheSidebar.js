@@ -18,14 +18,16 @@ import CIcon from '@coreui/icons-react'
 import navigation from './_nav'
 import PageSelector from '../components/sidebar/pageSelector'
 import { fetchPages } from '../store/actions/pagesActions'
+import { toggleSidebar } from '../store/actions/settingsActions'
 
 const TheSidebar = () => {
   const dispatch = useDispatch()
-  const show = useSelector(state => state.sidebarShow)
+  const show = useSelector(state => state.settings.sidebar_show)
   return (
     <CSidebar
       show={show}
-      onShowChange={(val) => dispatch({ type: 'set', sidebarShow: val })}
+      onShowChange={(val) => dispatch(toggleSidebar(val))}
+      colorScheme="light"
     >
       {/* <CSidebarBrand className="d-md-down-none" to="/">
         <CIcon

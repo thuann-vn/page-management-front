@@ -8,6 +8,7 @@ import AddOrderModal from '../../components/orders/addOrderModal';
 import OrderPanel from '../../components/orders/orderPanel';
 import { fetchOrders } from '../../store/actions/ordersActions';
 import OrderDetail from './orders/OrderDetail';
+import CustomerPanel from '../../components/customerPanel/customerPanel';
 
 const Orders = () => {
     const pages = useSelector(state => state.pages || []);
@@ -36,7 +37,7 @@ const Orders = () => {
         <div class="chat-container">
             <OrderList orders={orders} activeItem={activeOrder} onItemClick={(item)=>{ setActiveOrder(item)}}/>
             <OrderDetail order={activeOrder} page={currentPage}/>
-            <OrderPanel id={activeOrder.customer_id}/>
+            <CustomerPanel id={activeOrder.customer_id}/>
             <AddOrderModal customerId={activeOrder.id}></AddOrderModal>
         </div>
     )

@@ -17,7 +17,7 @@ const customersReducer = (state = initialState, action) => {
             state[payload.id] = payload;
             return state;
         case UPDATE_CUSTOMER:
-            state[id] = {
+            state[payload.id] = {
                 ...state[payload.id],
                 ...payload.data
             }

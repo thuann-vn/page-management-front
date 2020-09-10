@@ -8,6 +8,7 @@ import { threadChanged } from '../../store/actions/threadsActions';
 import PusherService from '../../services/pusher';
 import JwtDecode from 'jwt-decode';
 import { getCustomerActivities } from '../../store/actions/customersActions';
+import { cilTrash } from '@coreui/icons';
 
 const PageSelector = () => {
     const dropdownRef = useRef();

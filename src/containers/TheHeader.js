@@ -22,19 +22,20 @@ import {
   TheHeaderDropdownNotif,
   TheHeaderDropdownTasks
 }  from './index'
+import { toggleSidebar } from '../store/actions/settingsActions'
 
 const TheHeader = () => {
+  const sidebarShow = useSelector(state => state.settings.sidebar_show);
   const dispatch = useDispatch()
-  const sidebarShow = useSelector(state => state.sidebarShow)
 
-  const toggleSidebar = () => {
-    const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
-    dispatch({type: 'set', sidebarShow: val})
+  const toggleSidebarPC = () => {
+    const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive';
+    dispatch(toggleSidebar(val));
   }
 
   const toggleSidebarMobile = () => {
-    const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
-    dispatch({type: 'set', sidebarShow: val})
+    const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive';
+    dispatch(toggleSidebar(val));
   }
 
   return (
@@ -42,12 +43,12 @@ const TheHeader = () => {
       <CToggler
         inHeader
         className="ml-md-3 d-lg-none"
-        onClick={toggleSidebarMobile}
+        onClick={()=>toggleSidebarMobile()}
       />
       <CToggler
         inHeader
         className="ml-3 d-md-down-none"
-        onClick={toggleSidebar}
+        onClick={()=>toggleSidebarPC()}
       />
       <CHeaderBrand className="mx-auto d-lg-none" to="/">
         <CIcon name="logo" height="48" alt="Logo"/>

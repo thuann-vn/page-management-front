@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { CCard, CCardHeader, CCollapse, CCardBody, CCardFooter, CButton, CBadge, CListGroup, CListGroupItem, CInput, CFormGroup, CTextarea } from '@coreui/react';
+import { CCard, CCardHeader, CCollapse, CDropdownDivider, CCardFooter, CButton, CBadge, CListGroup, CListGroupItem, CInput, CFormGroup, CTextarea, CDropdownToggle, CDropdownMenu, CDropdownItem, CDropdown } from '@coreui/react';
 import commonUtils from '../../../utils/commonUtils';
 import formatUtils from '../../../utils/formatUtils';
 import CIcon from '@coreui/icons-react';
@@ -89,9 +89,6 @@ const OrderDetail = (props) => {
                 <CCardHeader>
                     <div>
                         <strong>#{order.order_code}</strong><br/>
-                        <time>{formatUtils.dateFormat(order.createdAt)}</time>
-                    </div>
-                    <div className="card-header-actions">
                         <CBadge className="order-status" color={commonUtils.getOrderStatusClass(order.status)}>
                             <CIcon content={cilTruck} />
                             {commonUtils.getOrderStatusStr(order.status)}
@@ -100,6 +97,21 @@ const OrderDetail = (props) => {
                             <CIcon content={cilMoney} />
                             {commonUtils.getOrderPaymentStatusStr(order.status)}
                         </CBadge>
+                    </div>
+                    <div className="card-header-actions">
+                        {/* <time>{formatUtils.dateFormat(order.createdAt)}</time> */}
+                        <CDropdown className="m-1">
+                            <CDropdownToggle split color="primary">
+                                Primary
+                            </CDropdownToggle>
+                            <CDropdownMenu>
+                                <CDropdownItem header>Header</CDropdownItem>
+                                <CDropdownItem disabled>Action Disabled</CDropdownItem>
+                                <CDropdownItem>Action</CDropdownItem>
+                                <CDropdownDivider />
+                                <CDropdownItem>Another Action</CDropdownItem>
+                            </CDropdownMenu>
+                        </CDropdown>
                     </div>
                 </CCardHeader>
                 <div className="product-list-container">
