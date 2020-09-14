@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 export default {
     apiUrl: process.env.API_URL || 'http://localhost:8080',
     facebookID: '302064867211847',
