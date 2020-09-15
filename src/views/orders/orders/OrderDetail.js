@@ -83,6 +83,10 @@ const OrderDetail = (props) => {
         }
     }
 
+    if(!order || !order.products){
+        return null;
+    }
+
     return (
         <div className="order-detail-container">
             <CCard>

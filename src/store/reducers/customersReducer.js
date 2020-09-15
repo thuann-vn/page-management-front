@@ -14,7 +14,6 @@ const customersReducer = (state = initialState, action) => {
             }else{
                 state[payload.id] = payload
             }
-            state[payload.id] = payload;
             return state;
         case UPDATE_CUSTOMER:
             state[payload.id] = {

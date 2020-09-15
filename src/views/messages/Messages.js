@@ -17,7 +17,7 @@ const pusher = new Pusher(Config.pusherAppKey, {
 const Messages = () => {
     const pages = useSelector(state => state.pages || []);
     var defaultPage = pages.length ? pages[0] : null;
-    const currentPage = useSelector(state => state.settings.currentPage || defaultPage)
+    const currentPage = useSelector(state => state.settings.currentPage || defaultPage);
     const allThreads = useSelector(state => state.threads || {})
     
     const [threads, setThreads] = useState(allThreads[currentPage.id] || []);
@@ -25,11 +25,19 @@ const Messages = () => {
     const [activeThread, setActiveThread] = useState(threads.length? threads[0] : {});
     
     React.useEffect(()=>{
-        var newThreads = [...allThreads[currentPage.id]];
-        setThreads(newThreads);
-        setActiveThread(newThreads.length ? newThreads[0] : null);
         dispatch(getThreadFromApi(currentPage.id));
     }, [currentPage]);
+
+    React.useEffect(()=>{
+        if(allThreads[currentPage.id]){
+            var newThreads = [...allThreads[currentPage.id]];
+            setThreads(newThreads);
+
+            if(!activeThread){
+                setActiveThread(newThreads.length ? newThreads[0] : null);
+            }
+        }
+    }, [currentPage, allThreads]);
 
     return (
         <div class="chat-container">

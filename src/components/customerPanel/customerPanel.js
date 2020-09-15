@@ -93,6 +93,8 @@ const CustomerPanel = (props) => {
         dispatch(updateCustomer(id, { notes }));
         setNoteInputCollapse(false);
     }
+
+    console.log(customer.tags);
     return (
         <div className="customer-panel">
             <div className="customer-name">

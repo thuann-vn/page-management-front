@@ -21,6 +21,10 @@ const Orders = () => {
     const [activeOrder, setActiveOrder] = useState(orders.length? orders[0] : {});
     
     React.useEffect(()=>{
+        dispatch(fetchOrders(currentPage.id));
+    }, [currentPage]);
+
+    React.useEffect(()=>{
         if(allOrders[currentPage.id]){
             var newOrders = [...allOrders[currentPage.id]];
             setOrders(newOrders);
@@ -29,9 +33,7 @@ const Orders = () => {
             setOrders([]);
             setActiveOrder({});
         }
-
-        dispatch(fetchOrders(currentPage.id));
-    }, [currentPage]);
+    }, [currentPage, allOrders]);
 
     return (
         <div class="chat-container">
